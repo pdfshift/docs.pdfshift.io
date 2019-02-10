@@ -6,7 +6,3 @@ Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia
 Provide your API key as the basic auth username value. The password is ignored and can be set to whatever you want (an empty string works fine).
 
 `Authorization: Basic your_api_key:`
-
-<aside class="notice">
-You must replace <code>your_api_key</code> with your personal API key.
-</aside>

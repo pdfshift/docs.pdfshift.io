@@ -9,7 +9,6 @@ language_tabs: # must be one of https://git.io/vQNgJ
 
 toc_footers:
   - <a href='https://pdfshift.io/account/register'>Create an account</a>
-  - <hr />
   - <a href='mailto:support@pdfshift.io'>support@pdfshift.io</a>
 
 includes:

@@ -9,5 +9,3 @@ gem 'middleman-sprockets', '~> 4.1.0'
 gem 'rouge', '~> 2.0.5'
 gem 'redcarpet', '~> 3.4.0'
 gem "nokogiri", ">= 1.8.5"
-gem "ffi", ">= 1.9.24"
-gem "rack", ">= 2.0.6"
