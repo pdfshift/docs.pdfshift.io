@@ -9,7 +9,7 @@ Many parameters are available to let you customize the resulting PDF to your nee
 
 ### HTTP Request
 
-`POST https://api.pdfshift.io/v2/convert/`
+`POST https://api.pdfshift.io/v2/convert`
 
 ### Parameters
 
@@ -131,51 +131,124 @@ image:
 text:
 
 
-## Converting an URL
+### Misc
 
-> A basic conversion call:
+When converting a document, if successful, the HTTP response from PDFShift's API will contain the following header:
 
-```shell
-```
+Header | Description
+--- | --- | ---
+X-Response-StatusCode | The status code from your URL source, when an URL is provided. This can be useful to ensure the URL worked correctly.
+
+
+## Use cases
+
+
+### Converting an URL
 
 ```javascript
+const pdfshift = require('pdfshift')('your_api_key');
+const fs = require('fs');
+
+pdfshift.convert('https://www.example.com').then(function (binary_file) {
+    fs.writeFile('result.pdf', binary_file, "binary", function () {})
+}).catch(function({message, code, response, errors = null}) {})
 ```
 
 ```php
+<?php
+// Using the function at 
+// https://gist.github.com/cnicodeme/f2c73d89ac49313d023d738b5cdb7046
+
+$response = pdfshift('your_api_key_here', array (
+    'source' => 'https://www.example.com'
+));
+
+file_put_contents('result.pdf', $response);
 ```
 
 ```python
+import requests
+
+response = requests.post(
+    'https://api.pdfshift.io/v2/convert',
+    auth=('your_api_key_here', ''),
+    json={'source': 'https://www.example.com'},
+    stream=True
+)
+
+response.raise_for_status()
+
+with open('result.pdf', 'wb') as output:
+    for chunck in response.iter_content(chunck_size=1024):
+        output.write(chunck)
 ```
+
 
 > The above command returns a PDF in binary format.
 
-This endpoint converts your HTML documents to PDF
+This endpoint the given URL to PDF.
 
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
-
-## Saving the document to Amazon S3
-
-```shell
-```
+### Saving the document to Amazon S3
 
 ```javascript
+const pdfshift = require('pdfshift')('your_api_key');
+const fs = require('fs');
+
+pdfshift.convert('https://www.example.com', {filename: 'result.pdf'}).then(function (body) {
+    let json = JSON.parse(body);
+    // The URL is on 
+    console.log(json.url);
+}).catch(function({message, code, response, errors = null}) {})
 ```
 
 ```php
+<?php
+$response = pdfshift('your_api_key_here', array (
+    'source' => 'https://www.example.com',
+    'filename' => 'result.pdf'
+));
+
+$json = json_decode($response, true);
+// The URL is at $json['url'];
 ```
 
 ```python
+import requests
+
+response = requests.post(
+    'https://api.pdfshift.io/v2/convert',
+    auth=('your_api_key_here', ''),
+    json={
+        'source': 'https://www.example.com',
+        'filename': 'result.pdf'
+    }
+)
+
+response.raise_for_status()
+
+json_response = response.json()
+# The URL to the document is at json_response['url]
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "success": true,
+  "url": "https://s3.amazonaws.com/pdfshift/d/2/2019-02/47fc3918791a4818a6bf655cfb63c96e/result.pdf",
+  "filesize": 13370,
+  "duration": 5
 }
 ```
 
@@ -183,12 +256,352 @@ By passing the "filename" parameter, the endpoint won't return the binary PDF, b
 
 This can be useful if you don't want to download a large PDF to your server to then serve it to your users, but instead redirect them directly to that document.
 
-### HTTP Request
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
-`GET http://example.com/kittens/<ID>`
+### Accessing secured pages
 
-### URL Parameters
+```javascript
+const pdfshift = require('pdfshift')('your_api_key');
+const fs = require('fs');
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+// We use .prepare() instead of .convert to easily handle advanced configuration
+pdfshift.prepare('https://httpbin.org/basic-auth/user/passwd')
+    .auth('user', 'passwd')
+    .convert()
+    .then(function (binary_file) {
+        fs.writeFile('result.pdf', binary_file, "binary", function () {})
+    })
+    .catch(function({message, code, response, errors = null}) {})
+```
+
+```php
+<?php
+$response = pdfshift('your_api_key_here', array (
+    'source' => 'https://httpbin.org/basic-auth/user/passwd',
+    'auth' => array (
+        'username' => 'user',
+        'password' => 'passwd'
+    )
+));
+
+file_put_contents('result.pdf', $response);
+```
+
+```python
+import requests
+
+response = requests.post(
+    'https://api.pdfshift.io/v2/convert',
+    auth=('your_api_key_here', ''),
+    json={
+        'source': 'https://httpbin.org/basic-auth/user/passwd',
+        'auth': {
+            'username': 'user',
+            'password': 'passwd'
+        }
+    },
+    stream=True
+)
+
+response.raise_for_status()
+
+with open('result.pdf', 'wb') as output:
+    for chunck in response.iter_content(chunck_size=1024):
+        output.write(chunck)
+```
+
+
+> The above command returns a PDF in binary format.
+
+If your documents are located inside a protected area requiring a Basic Auth access, you can use the `auth` parameter from PDFShift's API to connect to your website.
+Here's an example on how to do so.
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+### Using Cookies
+
+```javascript
+const pdfshift = require('pdfshift')('your_api_key');
+const fs = require('fs');
+
+// We use .prepare() instead of .convert to easily handle advanced configuration
+pdfshift.prepare('https://httpbin.org/cookies')
+    .addCookie({name: 'session', value: '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac'})
+    .convert()
+    .then(function (binary_file) {
+        fs.writeFile('result.pdf', binary_file, "binary", function () {})
+    })
+    .catch(function({message, code, response, errors = null}) {})
+```
+
+```php
+<?php
+$response = pdfshift('your_api_key_here', array (
+    'source' => 'https://httpbin.org/cookies',
+    'cookies' => array ('name' => 'session', 'value' => '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac')
+));
+
+file_put_contents('result.pdf', $response);
+```
+
+```python
+import requests
+
+response = requests.post(
+    'https://api.pdfshift.io/v2/convert',
+    auth=('your_api_key_here', ''),
+    json={
+        'source': 'https://httpbin.org/cookies',
+        'cookies': {'name': 'session', 'value': '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac'}
+    },
+    stream=True
+)
+
+response.raise_for_status()
+
+with open('result.pdf', 'wb') as output:
+    for chunck in response.iter_content(chunck_size=1024):
+        output.write(chunck)
+```
+
+> The above command returns a PDF in binary format.
+
+On the contrary, if your endpoint requires a more advanced authentication format, like a PHP session.
+You can add cookies to the parameter to simulate an active session.
+
+This can be easily done with the `cookies` parameter from our API.
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+### Adding a custom footer
+
+```javascript
+const pdfshift = require('pdfshift')('your_api_key');
+const fs = require('fs');
+
+// We use .prepare() instead of .convert to easily handle advanced configuration
+pdfshift.prepare('https://www.example.com')
+    .footer({source: '<div>Page {{page}} of {{total}}</div>', spacing: '50px'})
+    .convert()
+    .then(function (binary_file) {
+        fs.writeFile('result.pdf', binary_file, "binary", function () {})
+    })
+    .catch(function({message, code, response, errors = null}) {})
+```
+
+```php
+<?php
+$response = pdfshift('your_api_key_here', array (
+    'source' => 'https://www.example.com',
+    'footer' => array (
+        'source' => '<div style="font-size: 12px">Page {{ "{{page}}" }} of {{ "{{total}}" }}</div>',
+        'spacing' => '50px'
+    )
+));
+
+file_put_contents('result.pdf', $response);
+```
+
+```python
+import requests
+
+response = requests.post(
+    'https://api.pdfshift.io/v2/convert',
+    auth=('your_api_key_here', ''),
+    json={
+        'source': 'https://www.example.com',
+        'footer': {
+            'source': '<div style="font-size: 12px">Page {{ "{{page}}" }} of {{ "{{total}}" }}</div>',
+            'spacing': '50px'
+        }
+    },
+    stream=True
+)
+
+response.raise_for_status()
+
+with open('result.pdf', 'wb') as output:
+    for chunck in response.iter_content(chunck_size=1024):
+        output.write(chunck)
+```
+
+> The above command returns a PDF in binary format.
+
+One frequent action when converting a web document to PDF is to add header and footer.
+This is useful to add page number for instance, or the name of your company at the top of each pages.
+
+This is easily done in PDFShift with the `header`/`footer` parameter.
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+
+
+### Sending an invoice by email
+
+```javascript
+const express = require('express');
+const fs = require('fs');
+const nodemail = require('nodemailer');
+const pdfshift = require('pdfshift')('your_api_key');
+
+const app = express();
+
+app.get('/send/',  (req, res, next) => {
+    let invoice = fs.readFileSync('invoice.html', 'utf8');
+
+    pdfshift.convert(invoice).then(function (binary_pdf) {
+        let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: true,
+            auth: {
+                user: account.user,
+                pass: account.pass
+            }
+        });
+
+        let mailOptions = {
+            from: '"Billing at Your-Site" <billing@your-site.tld>',
+            to: "customer@gmail.com"
+            subject: "Thank you for your purchase",
+            text: fs.readFileSync('templates/emails/invoice.txt', 'utf8'),
+            html: fs.readFileSync('templates/emails/invoice.html', 'utf8'),
+            attachments: [
+                {
+                    filename: 'invoice.pdf',
+                    contentType: 'application/pdf',
+                    content: binary_pdf
+                }
+            ]
+        };
+
+        // send mail with defined transport object
+        await transporter.sendMail(mailOptions)
+
+        // Then, we redirect
+        res.redirect(301, '/thank-you');
+    }).catch(function({message, code, response, errors = null}) {})
+})
+```
+
+```php
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'path/to/PHPMailer/src/Exception.php';
+require 'path/to/PHPMailer/src/PHPMailer.php';
+require 'path/to/PHPMailer/src/SMTP.php';
+
+$source = file_get_contents('invoice.html');
+
+$binary_pdf = pdfshift('your_api_key_here', array (
+    'source' => $source
+));
+
+$mail = new PHPMailer(true);
+try {
+    $mail->isSMTP();
+    $mail->Host = 'smtp1.example.com;smtp2.example.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'billing@your-site.tld';
+    $mail->Password = 'secret';
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = 587;
+
+    $mail->setFrom('billing@your-site.tld', 'Billing at Your-Site');
+    $mail->addAddress('customer@gmail.com', 'John Doe');
+
+    // Body of the email
+    $mail->isHTML(true);
+    $mail->Subject = 'Thank you for your purchase';
+    $mail->Body    = file_get_contents('templates/emails/invoice.html');
+    $mail->AltBody = file_get_contents('templates/emails/invoice.txt');
+
+    // Add the invoice from PDFShift:
+    $mail->addStringAttachment($binary_pdf, 'invoice.pdf', 'base64', 'application/pdf');
+
+    $mail->send();
+    return redirect('/thank-you');
+} catch (Exception $e) {
+    // Manage exception
+}
+```
+
+```python
+from django.core.mail import EmailMultiAlternatives
+from django.shortcuts import redirect
+import requests
+
+document = open('invoice.html', 'r')
+document_content = document.read()
+document.close()
+
+response = requests.post(
+    'https://api.pdfshift.io/v2/convert',
+    auth=('your_api_key_here', ''),
+    json={'source': document_content}
+)
+
+response.raise_for_status()
+
+text_content = None
+with open('templates/emails/invoice.txt', 'r') as f:
+    text_content = f.read()
+
+html_content = None
+with open('templates/emails/invoice.html', 'r') as f:
+    html_content = f.read()
+
+msg = EmailMultiAlternatives("Thank you for your purchase", text_content, 'billing@your-site.tld', ['customer@gmail.com'])
+msg.attach_alternative(html_content, "text/html")
+msg.attach('invoice.pdf', response.content, 'application/pdf')
+msg.send()
+
+return redirect('/thank-you')
+```
+
+> The above command returns a PDF in binary format.
+
+Here's a complete example of how PDFShift can be integrated in one of your project.
+
+A frequent use case is to use PDFShift to convert a locally generated invoice made in HTML (displayed in the back-office of your customer), converted in PDF and then sent by email.
