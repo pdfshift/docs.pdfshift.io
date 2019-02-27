@@ -183,21 +183,147 @@ with open('result.pdf', 'wb') as output:
         output.write(chunck)
 ```
 
+```ruby
+require 'uri'
+require 'net/https'
+require 'json' # for hash to_json conversion
+
+uri = URI("https://api.pdfshift.io/v2/convert/")
+data = {"source" => "https://www.example.com"}
+
+Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = data.to_json
+    request["Content-Type"] = "application/json"
+    request.basic_auth 'your_api_key', ''
+
+    response = http.request(request)
+
+    if response.code == '200'
+        # Since Ruby 1.9.1 only:
+        File.binwrite("result.pdf", response.body)
+    else
+        # Handle other codes here
+        puts "#{response.code} #{response.body}"
+    end
+end
+```
+
+```java
+public static void main(String... args) throws Exception {
+    var jsonObject = new JSONObject();
+    jsonObject.put("source", "https://example.com");
+    var httpRequest = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.pdfshift.io/v2/convert"))
+            .timeout(Duration.ofSeconds(20))
+            .header("Content-Type", "application/json")
+            .header("Authentication", "Basic " + "your_api_key")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+            .build();
+
+    var httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
+
+    var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+
+    var statusCode = response.statusCode();
+    if (statusCode == 200 || statusCode == 201) {
+        // Save the file locally
+        var targetFile = new File("src/main/resources/targetFile.pdf");
+        Files.copy(response.body(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    } else {
+        // error occurred
+    }
+}
+```
+
+```csharp
+static void Main(string[] args)
+{
+    IRestClient client = new RestClient("https://api.pdfshift.io/v2/convert");
+    client.Authenticator = new HttpBasicAuthenticator("your_api_key", "");
+
+    IRestRequest request = new RestRequest(Method.POST);
+
+    var json = new
+    {
+        source = "https://www.example.com"
+    };
+    request.AddJsonBody(json);
+
+    IRestResponse response = client.Execute(request);
+    if (!response.IsSuccessful)
+    {
+        // Check why status is not int 2xx.
+    }
+    else
+    {
+        File.WriteAllBytes("result.pdf", response.RawBytes);
+    }
+}
+```
+
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "io/ioutil"
+    "log"
+    "net/http"
+)
+
+func main() {
+    API_KEY := "your_api_key"
+
+    message := map[string]interface{}{
+        "source":  "https://example.com",
+    }
+
+    bytesRepresentation, err := json.Marshal(message)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    client := http.Client{}
+    request, err := http.NewRequest("POST", "https://api.pdfshift.io/v2/convert", bytes.NewBuffer(bytesRepresentation))
+    if err != nil {
+        log.Fatalln(err)
+    }
+    request.Header.Set("Content-Type", "application/json")
+    request.Header.Set("Authorization", "Basic " + API_KEY)
+
+    resp, err := client.Do(request)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            log.Fatalln(err)
+        }
+        // write the response to file
+        ioutil.WriteFile("example.pdf", body, 0644)
+    } else {
+        // An error occurred
+        var result map[string]interface{}
+
+        json.NewDecoder(resp.Body).Decode(&result)
+
+        log.Println(result)
+        log.Println(result["data"])
+    }
+}
+```
+
 
 > The above command returns a PDF in binary format.
 
 This endpoint the given URL to PDF.
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 
 ### Saving the document to Amazon S3
 
@@ -241,6 +367,149 @@ json_response = response.json()
 # The URL to the document is at json_response['url]
 ```
 
+```ruby
+require 'uri'
+require 'net/https'
+require 'json' # for hash to_json conversion
+
+uri = URI("https://api.pdfshift.io/v2/convert/")
+data = { "source" => 'http://www.example.com',
+    "filename" => "result.pdf" }
+
+Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = data.to_json
+    request["Content-Type"] = "application/json"
+    request.basic_auth 'your_api_key', ''
+
+    response = http.request(request)
+
+    if response.code == '200'
+        puts response.body
+        # { "duration":1309,
+        # "filesize":37511,
+        # "success":true,
+        # "url":"<amazon_s3_url>/result.pdf"}
+    else
+        # Handle other codes here
+        puts "#{response.code} #{response.body}"
+    end
+end
+```
+
+```java
+public static void main(String... args) throws Exception {
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("source", "https://example.com");
+    jsonObject.put("filename", "result.pdf");
+    
+    var httpRequest = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.pdfshift.io/v2/convert"))
+            .timeout(Duration.ofSeconds(20))
+            .header("Content-Type", "application/json")
+            .header("Authentication", "Basic " + "your_api_key")
+            .POST(HttpRequest.BodyPublishers.ofFile(Paths.get("src/main/resources/body.json")))
+            .build();
+
+    var httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
+
+    var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+    var statusCode = response.statusCode();
+    if (statusCode == 200 || statusCode == 201) {
+        // Response body is a json string. 
+        var result = new JSONObject(response.body());
+        System.out.println(result.get("url"));
+    } else {
+        // error occurred
+    }
+}
+```
+
+```csharp
+static void Main(string[] args)
+{
+    IRestClient client = new RestClient("https://api.pdfshift.io/v2/convert");
+    client.Authenticator = new HttpBasicAuthenticator("your_api_key", "");
+
+    IRestRequest request = new RestRequest(Method.POST);
+
+    var json = new
+    {
+        source = "https://www.example.com",
+        filename = "result.pdf"
+    };
+    request.AddJsonBody(json);
+
+    IRestResponse response = client.Execute(request);
+    if (!response.IsSuccessful)
+    {
+        // Check why status is not int 2xx.
+    }
+    else
+    {
+        var jObject = JObject.Parse(response.Content);
+        Console.WriteLine(jObject["url"].Value<string>());
+    }
+}
+```
+
+```go
+package main
+
+import (
+    "net/http"
+    "log"
+    "encoding/json"
+    "bytes"
+    
+)
+
+func main() {
+    API_KEY := "your_api_key"
+
+    message := map[string]interface{}{
+        "source": "https://example.com",
+        "filename": "anotherExample.pdf",
+    }
+
+    bytesRepresentation, err := json.Marshal(message)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    client := http.Client{}
+    request, err := http.NewRequest("POST", "https://api.pdfshift.io/v2/convert", bytes.NewBuffer(bytesRepresentation))
+    if err != nil {
+        log.Fatalln(err)
+    }
+    request.Header.Set("Content-Type", "application/json")
+    request.Header.Set("Authorization", "Basic " + API_KEY)
+
+    resp, err := client.Do(request)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var result map[string]interface{}
+
+        json.NewDecoder(resp.Body).Decode(&result)
+
+        log.Println(result["url"])
+    } else {
+        // An error occurred
+        var result map[string]interface{}
+
+        json.NewDecoder(resp.Body).Decode(&result)
+
+        log.Println(result)
+    }
+}
+```
+
 > The above command returns JSON structured like this:
 
 ```json
@@ -255,21 +524,6 @@ json_response = response.json()
 By passing the "filename" parameter, the endpoint won't return the binary PDF, but an URL from Amazon S3 where the document will be stored for 2 days before being automatically deleted.
 
 This can be useful if you don't want to download a large PDF to your server to then serve it to your users, but instead redirect them directly to that document.
-
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 
 ### Accessing secured pages
 
@@ -323,22 +577,162 @@ with open('result.pdf', 'wb') as output:
         output.write(chunck)
 ```
 
+```ruby
+require 'uri'
+require 'net/https'
+require 'json' # for hash to_json conversion
+
+uri = URI("https://api.pdfshift.io/v2/convert/")
+data = {"source" => "https://httpbin.org/basic-auth/user/passwd",
+    "auth" => {
+        "username" => "user",
+        "password" => "passwd"
+    } }
+
+Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = data.to_json
+    request["Content-Type"] = "application/json"
+    request.basic_auth 'your_api_key', ''
+
+    response = http.request(request)
+
+    if response.code == '200'
+        # Since Ruby 1.9.1 only:
+        File.binwrite("result.pdf", response.body)
+    else
+        # Handle other codes here
+        puts "#{response.code} #{response.body}"
+    end
+end
+```
+
+```java
+public static void main(String... args) throws Exception {
+    var jsonObject = new JSONObject();
+    jsonObject.put("source", "https://httpbin.org/basic-auth/user/passwd");
+
+    var auth = new JSONObject();
+    auth.put("username", "user");
+    auth.put("password", "passwd");
+    
+    jsonObject.put("auth", auth);
+
+    var httpRequest = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.pdfshift.io/v2/convert"))
+            .timeout(Duration.ofSeconds(20))
+            .header("Content-Type", "application/json")
+            .header("Authentication", "Basic " + "your_api_key")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+            .build();
+
+    var httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
+
+    var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+
+    var statusCode = response.statusCode();
+    if (statusCode == 200 || statusCode == 201) {
+        // Save the file locally
+        var targetFile = new File("src/main/resources/targetFile.pdf");
+        Files.copy(response.body(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    } else {
+        // error occurred
+    }
+}
+```
+
+```csharp
+static void Main(string[] args)
+{
+    IRestClient client = new RestClient("https://api.pdfshift.io/v2/convert");
+    client.Authenticator = new HttpBasicAuthenticator("your_api_key", "");
+
+    IRestRequest request = new RestRequest(Method.POST);
+
+    var json = new
+    {
+        source = "https://httpbin.org/basic-auth/user/passwd",
+        auth = new { username = "user", password = "passwd" }
+    };
+    request.AddJsonBody(json);
+
+    IRestResponse response = client.Execute(request);
+    if (!response.IsSuccessful)
+    {
+        // Check why status is not int 2xx.
+    }
+    else
+    {
+        File.WriteAllBytes("result.pdf", response.RawBytes);
+    }
+}
+```
+
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "io/ioutil"
+    "log"
+    "net/http"
+)
+
+func main() {
+    API_KEY := "your_api_key"
+
+    message := map[string]interface{}{
+        "source": "https://httpbin.org/basic-auth/user/passwd",
+        "auth": map[string]string{
+            "username": "user",
+            "password": "passwd",
+        },
+    }
+
+    bytesRepresentation, err := json.Marshal(message)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    client := http.Client{}
+    request, err := http.NewRequest("POST", "https://api.pdfshift.io/v2/convert", bytes.NewBuffer(bytesRepresentation))
+    if err != nil {
+        log.Fatalln(err)
+    }
+    request.Header.Set("Content-Type", "application/json")
+    request.Header.Set("Authorization", "Basic " + API_KEY)
+
+    resp, err := client.Do(request)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            log.Fatalln(err)
+        }
+        // write the response to file
+        ioutil.WriteFile("example.pdf", body, 0644)
+    } else {
+        var result map[string]interface{}
+
+        json.NewDecoder(resp.Body).Decode(&result)
+
+        log.Println(result)
+    }
+}
+```
+
 
 > The above command returns a PDF in binary format.
 
 If your documents are located inside a protected area requiring a Basic Auth access, you can use the `auth` parameter from PDFShift's API to connect to your website.
 Here's an example on how to do so.
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 
 ### Using Cookies
 
@@ -386,6 +780,161 @@ with open('result.pdf', 'wb') as output:
         output.write(chunck)
 ```
 
+```ruby
+require 'uri'
+require 'net/https'
+require 'json' # for hash to_json conversion
+
+uri = URI("https://api.pdfshift.io/v2/convert/")
+data = {"source" => "https://httpbin.org/cookies",
+    "cookies" => [{"name" => "session",
+    "value" => "4cb496a8-a3eb-4a7e-a704-f993cb6a4dac" }] }
+
+Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = data.to_json
+    request["Content-Type"] = "application/json"
+    request.basic_auth 'your_api_key', ''
+
+    response = http.request(request)
+
+    if response.code == '200'
+        # Since Ruby 1.9.1 only:
+        File.binwrite("result.pdf", response.body)
+    else
+        # Handle other codes here
+        puts "#{response.code} #{response.body}"
+    end
+end
+```
+
+```java
+public static void main(String... args) throws Exception {
+    var jsonObject = new JSONObject();
+    jsonObject.put("source", "https://httpbin.org/cookies");
+
+    var cookie = new JSONObject();
+    cookie.put("name", "session");
+    cookie.put("value", "4cb496a8-a3eb-4a7e-a704-f993cb6a4dac");
+
+    var cookies = new JSONArray();
+    cookies.put(cookie);
+
+    jsonObject.put("cookies", cookies);
+
+    var httpRequest = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.pdfshift.io/v2/convert"))
+            .timeout(Duration.ofSeconds(20))
+            .header("Content-Type", "application/json")
+            .header("Authentication", "Basic " + "your_api_key")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+            .build();
+
+    var httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
+
+    var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+
+    var statusCode = response.statusCode();
+    if (statusCode == 200 || statusCode == 201) {
+        // Save the file locally
+        var targetFile = new File("src/main/resources/targetFile.pdf");
+        Files.copy(response.body(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    } else {
+        // error occurred
+    }
+}
+```
+
+```csharp
+static void Main(string[] args)
+{
+    IRestClient client = new RestClient("https://api.pdfshift.io/v2/convert");
+    client.Authenticator = new HttpBasicAuthenticator("your_api_key", "");
+
+    IRestRequest request = new RestRequest(Method.POST);
+
+    var json = new
+    {
+        source = "https://httpbin.org/cookies",
+        cookies = new object[] { new { name = "Session", value = "4cb496a8-a3eb-4a7e-a704-f993cb6a4dac" } }
+    };
+    request.AddJsonBody(json);
+
+    IRestResponse response = client.Execute(request);
+    if (!response.IsSuccessful)
+    {
+        // Check why status is not int 2xx.
+    }
+    else
+    {
+        File.WriteAllBytes("result.pdf", response.RawBytes);
+    }
+}
+```
+
+```go
+package main
+
+import (
+    "net/http"
+    "log"
+    "encoding/json"
+    "bytes"
+    "io/ioutil"
+    
+)
+
+func main() {
+    API_KEY := "your_api_key"
+
+    cookies := make([]map[string]string, 1)
+
+    cookies[0] = make(map[string]string)
+    cookies[0]["name"] = "session"
+    cookies[0]["value"] = "4cb496a8-a3eb-4a7e-a704-f993cb6a4dac"
+
+    message := map[string]interface{}{
+        "source": "<html><head><title>Hello world</title><body><h1>Hello World</h1></body></head></html>",
+        "cookies": cookies,
+    }
+
+    bytesRepresentation, err := json.Marshal(message)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    client := http.Client{}
+    request, err := http.NewRequest("POST", "https://api.pdfshift.io/v2/convert", bytes.NewBuffer(bytesRepresentation))
+    if err != nil {
+        log.Fatalln(err)
+    }
+    request.Header.Set("Content-Type", "application/json")
+    request.Header.Set("Authorization", "Basic " + API_KEY)
+
+    resp, err := client.Do(request)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            log.Fatalln(err)
+        }
+        // write the response to file
+        ioutil.WriteFile("example.pdf", body, 0644)
+    } else {
+        var result map[string]interface{}
+
+        json.NewDecoder(resp.Body).Decode(&result)
+
+        log.Println(result)
+    }
+}
+```
+
 > The above command returns a PDF in binary format.
 
 On the contrary, if your endpoint requires a more advanced authentication format, like a PHP session.
@@ -393,16 +942,6 @@ You can add cookies to the parameter to simulate an active session.
 
 This can be easily done with the `cookies` parameter from our API.
 
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 
 ### Adding a custom footer
 
@@ -456,23 +995,162 @@ with open('result.pdf', 'wb') as output:
         output.write(chunck)
 ```
 
+```ruby
+require 'uri'
+require 'net/https'
+require 'json' # for hash to_json conversion
+
+uri = URI("https://api.pdfshift.io/v2/convert/")
+data = {"source" => "https://www.example.com",
+    'footer' => {
+        'source' => '<div style="font-size: 12px">Page {{ "{{page}}" }} of {{ "{{total}}" }}</div>',
+        'spacing' => '50px'
+    } }
+
+Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = data.to_json
+    request["Content-Type"] = "application/json"
+    request.basic_auth 'your_api_key', ''
+
+    response = http.request(request)
+
+    if response.code == '200'
+        # Since Ruby 1.9.1 only:
+        File.binwrite("result.pdf", response.body)
+    else
+        # Handle other codes here
+        puts "#{response.code} #{response.body}"
+    end
+end
+```
+
+```java
+public static void main(String... args) throws Exception {
+    var jsonObject = new JSONObject();
+    jsonObject.put("source", "https://www.example.com");
+
+    var footer = new JSONObject();
+    footer.put("source", "<div style='font-size: 12px'>Page {{ "{{page}}" }} of {{ "{{total}}" }}</div>");
+    footer.put("spacing", "50px");
+
+    jsonObject.put("footer", footer);
+
+    var httpRequest = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.pdfshift.io/v2/convert"))
+            .timeout(Duration.ofSeconds(20))
+            .header("Content-Type", "application/json")
+            .header("Authentication", "Basic " + "your_api_key")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+            .build();
+
+    var httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
+
+    var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+
+    var statusCode = response.statusCode();
+    if (statusCode == 200 || statusCode == 201) {
+        // Save the file locally
+        var targetFile = new File("src/main/resources/targetFile.pdf");
+        Files.copy(response.body(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+    } else {
+        // error occurred
+    }
+}
+```
+
+```csharp
+static void Main(string[] args)
+{
+    IRestClient client = new RestClient("https://api.pdfshift.io/v2/convert");
+    client.Authenticator = new HttpBasicAuthenticator("your_api_key", "");
+
+    IRestRequest request = new RestRequest(Method.POST);
+
+    var json = new
+    {
+        source = "https://www.example.com",
+        footer = new { source = "<div style=\"font-size: 12px\">Page {{ "{{page}}" }} of {{ "{{total}}" }}</div>", spacing = "50px" }
+    };
+    request.AddJsonBody(json);
+
+    IRestResponse response = client.Execute(request);
+    if (!response.IsSuccessful)
+    {
+        // Check why status is not int 2xx.
+    }
+    else
+    {
+        File.WriteAllBytes("result.pdf", response.RawBytes);
+    }
+}
+```
+
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "io/ioutil"
+    "log"
+    "net/http"
+)
+
+func main() {
+    API_KEY := "your_api_key"
+
+    message := map[string]interface{}{
+        "source": "https://www.example.com",
+        "footer": map[string]string{
+            "source": "<div style='font-size: 12px'>Page {{ "{{page}}" }} of {{ "{{total}}" }}</div>",
+            "spacing": "50px",
+        },
+    }
+
+    bytesRepresentation, err := json.Marshal(message)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    client := http.Client{}
+    request, err := http.NewRequest("POST", "https://api.pdfshift.io/v2/convert", bytes.NewBuffer(bytesRepresentation))
+    if err != nil {
+        log.Fatalln(err)
+    }
+    request.Header.Set("Content-Type", "application/json")
+    request.Header.Set("Authorization", "Basic " + API_KEY)
+
+    resp, err := client.Do(request)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            log.Fatalln(err)
+        }
+        // write the response to file
+        ioutil.WriteFile("example.pdf", body, 0644)
+    } else {
+        var result map[string]interface{}
+
+        json.NewDecoder(resp.Body).Decode(&result)
+
+        log.Println(result)
+    }
+}
+```
+
 > The above command returns a PDF in binary format.
 
 One frequent action when converting a web document to PDF is to add header and footer.
 This is useful to add page number for instance, or the name of your company at the top of each pages.
 
 This is easily done in PDFShift with the `header`/`footer` parameter.
-
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
-<br />
 
 
 ### Sending an invoice by email
@@ -598,6 +1276,271 @@ msg.attach('invoice.pdf', response.content, 'application/pdf')
 msg.send()
 
 return redirect('/thank-you')
+```
+
+```ruby
+require 'uri'
+require 'net/https'
+require 'json'
+require 'net/smtp'
+require 'mail'
+require 'sinatra'
+
+get '/send' do
+    generate_invoice
+    send_invoice_via_email
+    redirect to('/thank-you')
+end
+
+get '/thank-you' do
+    'Check your email! thanks for using PDFShift!'
+end
+
+def generate_invoice
+    file = File.read("invoice.html")
+    uri = URI("https://api.pdfshift.io/v2/convert/")
+    data = {"source" => file}
+
+    Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+        request = Net::HTTP::Post.new(uri.request_uri)
+        request.body = data.to_json
+        request["Content-Type"] = "application/json"
+        request.basic_auth 'your_api_key', ''
+
+        response = http.request(request)
+
+        if response.code == '200'
+            File.binwrite("result.pdf", response.body)
+        else
+            puts "#{response.code} #{response.body}"
+        end
+    end
+end
+
+def send_invoice_via_email
+    # Update user_name and password with a valid gmail account
+    options = { :address              => "smtp.gmail.com",
+                :port                 => 587,
+                :domain               => 'pdfshift.io',
+                :user_name            => 'example@gmail.com',
+                :password             => 'examplepassword',
+                :authentication       => 'plain',
+                :enable_starttls_auto => true }
+
+    Mail.defaults do
+        delivery_method :smtp, options
+    end
+
+    # Update the email fields to your needs
+    Mail.deliver do
+        from     'pdfshift-user@pdfshift.io'
+        to       'recipient@domain.com'
+        subject  'Your invoice'
+        body     "Here's the invoice you requested"
+        add_file 'result.pdf'
+    end
+end
+```
+
+```java
+public static void main(String... args) throws Exception {
+    byte[] encoded = Files.readAllBytes(Paths.get("src/main/resources/example.html"));
+    String documentContent = new String(encoded, Charset.defaultCharset());
+
+    var jsonObject = new JSONObject();
+    jsonObject.put("source", documentContent);
+    
+    var httpRequest = HttpRequest.newBuilder()
+            .uri(URI.create("https://api.pdfshift.io/v2/convert"))
+            .timeout(Duration.ofSeconds(10))
+            .header("Content-Type", "application/json")
+            .header("Authentication", "Basic " + "your_api_key")
+            .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+            .build();
+
+    var httpClient = HttpClient.newBuilder()
+            .version(HttpClient.Version.HTTP_1_1)
+            .build();
+    var response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofInputStream());
+
+    var statusCode = response.statusCode();
+    if (statusCode == 200 || statusCode == 201) {
+        // save pdf to file targetFile.pdf
+        var targetFile = new File("src/main/resources/targetFile.pdf");
+        Files.copy(response.body(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+        // Send pdf as email attachment
+        var prop = new Properties();
+        prop.put("mail.smtp.auth", true);
+        prop.put("mail.smtp.starttls.enable", "true");
+        prop.put("mail.smtp.host", "smtp.mailtrap.io");
+        prop.put("mail.smtp.port", "25");
+        prop.put("mail.smtp.ssl.trus", "smtp.mailtrap.io");
+
+        var username = "get username from mailtrap.io";
+        var password = "get password from mailtrap.io";
+
+        var session = Session.getInstance(prop, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
+            }
+        });
+
+        var message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("from@gmail.com"));
+        message.setRecipients(
+                Message.RecipientType.TO, InternetAddress.parse("to@gmail.com")
+        );
+        message.setSubject("Mail Subject");
+
+        var attachment = new File("src/main/resources/targetFile.pdf");
+
+        var mimeBodyPart = new MimeBodyPart();
+        mimeBodyPart.setContent("Just ignore this message", "text/plain");
+        mimeBodyPart.attachFile(attachment);
+
+        var multipart = new MimeMultipart();
+        multipart.addBodyPart(mimeBodyPart);
+
+        message.setContent(multipart);
+
+        Transport.send(message);
+    } else {
+        System.out.println("Error occured");
+    }
+}
+```
+
+```csharp
+static void Main(string[] args)
+{
+    IRestClient client = new RestClient("https://api.pdfshift.io/v2/convert");
+    client.Authenticator = new HttpBasicAuthenticator("your_api_key", "");
+
+    IRestRequest request = new RestRequest(Method.POST);
+    string document_content = File.ReadAllText("invoice.html");
+    var json = new
+    {
+        source = document_content,
+        sandbox = true,
+    };
+    request.AddJsonBody(json);
+    IRestResponse response = client.Execute(request);
+
+    if (!response.IsSuccessful)
+    {
+        // Check why status is not int 2xx.
+    }
+
+    SmtpClient smtpClient = new SmtpClient();
+    smtpClient.EnableSsl = true;
+    NetworkCredential basicCredential = new NetworkCredential("YourMail", "YourPassword");
+    MailMessage message = new MailMessage();
+    MailAddress fromAddress = new MailAddress("billing@your-site.tld");
+
+    // setup up the host, increase the timeout to 5 minutes
+    smtpClient.Host = "smtp.gmail.com";
+    smtpClient.UseDefaultCredentials = false;
+    smtpClient.Credentials = basicCredential;
+    smtpClient.Timeout = (60 * 5 * 1000);
+
+    message.From = fromAddress;
+    message.Subject = "Thank you for your purchase";
+    message.IsBodyHtml = false;
+    message.Body = File.ReadAllText("templates/emails/invoice.html");
+    message.To.Add("customer@gmail.com");
+
+    Attachment attachment;
+    using (MemoryStream stream = new MemoryStream(response.RawBytes))
+    {
+        attachment = new Attachment(stream, "invoice.pdf");
+        message.Attachments.Add(attachment);
+    }
+
+    smtpClient.Send(message);
+}
+```
+
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "io/ioutil"
+    "log"
+    "net/http"
+    "net/mail"
+    "net/smtp"
+
+    "github.com/scorredoira/email"
+)
+
+func main() {
+    API_KEY := "your_api_key"
+
+    encoded, err := ioutil.ReadFile("example.html")
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    documentContent := string(encoded)
+
+    message := map[string]interface{}{
+        "source":  documentContent,
+        "sandbox": true,
+    }
+
+    bytesRepresentation, err := json.Marshal(message)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    client := http.Client{}
+    request, err := http.NewRequest("POST", "https://api.pdfshift.io/v2/convert", bytes.NewBuffer(bytesRepresentation))
+    if err != nil {
+        log.Fatalln(err)
+    }
+    request.Header.Set("Content-Type", "application/json")
+    request.Header.Set("Authorization", "Basic " + API_KEY)
+
+    resp, err := client.Do(request)
+    if err != nil {
+        log.Fatalln(err)
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            log.Fatalln(err)
+        }
+                // write the response to file
+                ioutil.WriteFile("example.pdf", body, 0644)
+
+        // Send email
+                m := email.NewMessage("Hi", "This is an example converted file")
+                m.From = mail.Address{Name: "From", Address: "from@example.com"}
+                m.To = []string{"to@example.com"}
+
+                if err := m.Attach("example.pdf"); err != nil {
+                    log.Fatalln(err)
+                }
+
+                auth := smtp.PlainAuth("", "c33e0593149230", "84d1dec05f668b", "smtp.mailtrap.io")
+                if err := email.Send("smtp.mailtrap.io:2525", auth, m); err != nil {
+                    log.Fatalln(err)
+                }
+    } else {
+        // An error occurred
+        var result map[string]interface{}
+
+        json.NewDecoder(resp.Body).Decode(&result)
+
+        log.Println(result)
+        log.Println(result["data"])
+    }
+}
 ```
 
 > The above command returns a PDF in binary format.

@@ -5,10 +5,10 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
   - python
   - php
-#  - ruby
-#  - java
-#  - csharp
-#  - go
+  - ruby
+  - java
+  - csharp
+  - go
 #  - shell
 
 toc_footers:
