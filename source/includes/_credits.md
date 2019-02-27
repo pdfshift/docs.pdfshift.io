@@ -2,31 +2,23 @@
 
 ## Credits status
 
-```shell
-```
-
-```javascript
-```
-
-```php
-```
-
-```python
-```
-
-> The above command returns JSON structured like this:
+> Sending a GET request to the credits endpoint returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "total": 1000,
+  "used": 150,
+  "remaingin": 850
 }
 ```
+
+
+Simply send a GET request toward `https://api.pdfshift.io/v2/account/credits` to know in details your credits usage for your account.
+
+Don't forget to set your API key as "Basic auth".
 
 
 ### HTTP Request
 
 `GET https://api.pdfshift.io/v2/account/credits`
+

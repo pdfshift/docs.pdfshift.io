@@ -18,9 +18,9 @@ toc_footers:
 includes:
 #  - errors
  - introduction
- - authentication
  - convert
  - credits
+ - support
 
 search: true
 ---

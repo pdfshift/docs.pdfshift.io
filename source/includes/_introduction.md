@@ -4,6 +4,29 @@ Welcome to the PDFShift API. This documentation contains all the details needed 
 
 You will find code samples in Shell, Javascript, Python and PHP.
 
+## Getting an API Key
+
+In order to generate PDF without the PDFShift's watermark, you will need an API Key.
+You can request one by creating an account on [PDFShift's website](https://pdfshift.io/register/).
+
+Once you have submitted the form, we will send you an email containing your API Key.
+You can also create other API Key if you want, to split your keys accross your project.
+This can be done via your [Dashboard](https://pdfshift.io/account/dashboard/).
+
+You can test and play with our API without an API Key. Simply don't provide a "Basic Auth" header and the request will be done, with the difference that a watermark will be applied to the document.
+Note that applying a watermark makes the generation slower, so you will have better result when using your API Key.
+
+
+## Authentication
+
+Authenticate your account by including your secret key in API requests. You can manage your API keys in the [Dashboard](https://pdfshift.io/account/dashboard/).
+
+Authentication to the API is performed via [HTTP Basic Auth](http://en.wikipedia.org/wiki/Basic_access_authentication).
+Provide your API key as the basic auth username value. The password is ignored and can be set to whatever you want (an empty string works fine).
+
+`Authorization: Basic your_api_key:`
+
+
 ## Rate limiting
 
 Rate limiting is only forced for **unauthenticated accounts** with a limit of 2 requests per minutes.
