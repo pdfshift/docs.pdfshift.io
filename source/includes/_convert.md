@@ -17,7 +17,7 @@ Provide the parameters as a JSON object.
 
 Parameter | Default | Description
 --------- | ------- | -----------
-source | **required** | Original document to convert to PDF. PDFShift will automatically detect if it's an URL and load it, or an HTML document and charge it.
+source | **required** | Original document to convert to PDF. PDFShift will automatically detect if it's an URL and load it, or an HTML document and charge it.<br />You can also send an array of documents to convert if parallel conversions is enabled on your account. In that case, you will also need to provide the `webhook` parameters as this operation is asynchronous.
 sandbox | false | Will generates documents that doesn't count in the credits. The generated document will come with a watermark.
 encode | false | Will return the generated PDF in Base64 encoded format, instead of raw.
 timeout |  null | If provided, will kill the page loading at a specified time without stopping with a TimeoutError. Value in seconds
@@ -33,6 +33,7 @@ use_print | false | Use the print stylesheet instead of the general one.
 format | A4 | Format of the document. You can either use the standard values (Letter, Legal, Tabloid, Ledger, A0, A1, A2, A3, A4, A5) or a custom `{width}x{height}` value. For {width} and {height}, you can indicate the following units: in, cm, mm.
 viewport | 1200x1024 | Viewport size. Defined as `width x height`. Default is 1200x1024.
 zoom | 1 | A value between 0 and 2. Allows you to increase the zoom in the document for specific purposes. 1 is the default zoom, lower is smaller, higher is bigger.
+webhook | null | An URL where we will send a POST request containing a JSON body similar to when you use the `filename` parameter. The JSON response will contain a `URL` key that points to your file, stored on Amazon S3.
 margin | null | Empty spaces between the outer and the beginning of the content
 auth | null | Object containing `username` and `password` for accessing password-protected content.
 cookies | null | List of cookies you want to send along with the requests when loading the source. See the related part at the bottom of the document
