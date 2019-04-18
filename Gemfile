@@ -14,3 +14,5 @@ gem "slim", "~> 4.0"
 gem "less", "~> 2.6"
 gem "liquid", "~> 4.0"
 gem "stylus", "~> 1.0"
+
+gem "therubyracer", "~> 0.12.3"
