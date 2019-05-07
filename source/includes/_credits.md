@@ -13,12 +13,12 @@
 ```
 
 
-Simply send a GET request toward `https://api.pdfshift.io/v2/account/credits` to know in details your credits usage for your account.
+Simply send a GET request toward `https://api.pdfshift.io/v2/credits/` to know in details your credits usage for your account.
 
 Don't forget to set your API key as "Basic auth".
 
 
 ### HTTP Request
 
-`GET https://api.pdfshift.io/v2/account/credits`
+`GET https://api.pdfshift.io/v2/credits/`
 
