@@ -21,6 +21,7 @@ source | **required** | Original document to convert to PDF. PDFShift will autom
 sandbox | false | Will generates documents that doesn't count in the credits. The generated document will come with a watermark.
 encode | false | Will return the generated PDF in Base64 encoded format, instead of raw.
 timeout |  null | If provided, will kill the page loading at a specified time without stopping with a TimeoutError. Value in seconds
+wait_for | null | Name of a function available globally. When present, PDFShift will wait for this function to return a truthy value (true, 1, a string, etc) or up to 30 seconds, then proceed to the conversion.
 landscape | false | Will set the view in landscape mode instead of portrait
 css | null | Will append this CSS styles to the document before saving it. Can be an URL or a String of CSS rules.
 javascript | null | Will execute the given Javascript before saving the document. Can be an URL or a String of JS code.
@@ -139,6 +140,50 @@ When converting a document, if successful, the HTTP response from PDFShift's API
 Header | Description
 --- | --- | ---
 X-Response-StatusCode | The status code from your URL source, when an URL is provided. This can be useful to ensure the URL worked correctly.
+
+
+### Webhooks
+
+<aside class="warning">
+When the conversion fail, we also do a `POST` request to your endpoint, but with an `error` key instead.<br />
+We recommend you to first check if the body contains the `error` before processing the document, and act accordingly.
+</aside>
+
+If the `webhook` parameter is defined, the call to PDFShift's API will return a Queued response along with a 202 status code, like the following:
+
+`{"queued": true}`
+
+Once the processing has been done, we will send a `POST` request to your webhook endpoint, containing a JSON payload with the URL to your converted document, stored at Amazon S3 (for two days).
+
+Here's a sample of the payload we will send you:
+
+```
+{
+    "duration": 3121.766417985782,
+    "filesize": 259972,
+    "response": {
+        "duration": 2562,
+        "status-code": 200
+    },
+    "success": true,
+    "url": "https://s3.amazonaws.com/pdfshift/d/2/2019-05/99c456250a01448686d81752a3fb5beb/15466098-8368-49e1-ac33-ff4c3941a0df.pdf"
+}
+```
+
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+In case there is any error while processing your document, we will instead send you a payload containing an `error` key, like the following:
+
+```
+{
+    "error": {
+        "code": 400,
+        "error": "The requested page took too long to load.",
+        "identifier": "A74",
+        "success": false
+    }
+}
+```
 
 
 ## Use cases
