@@ -471,6 +471,8 @@ Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
         # "filesize":37511,
         # "success":true,
         # "url":"<amazon_s3_url>/result.pdf"}
+        data = JSON.parse(response.body)
+        redirect_to data['url']
     else
         # Handle other codes here
         puts "#{response.code} #{response.body}"
