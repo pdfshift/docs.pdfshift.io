@@ -15,46 +15,45 @@ Many parameters are available to let you customize the resulting PDF to your nee
 
 Provide the parameters as a JSON object.
 
-Parameter | Default | Description
---------- | ------- | -----------
-source | **required** | Original document to convert to PDF. PDFShift will automatically detect if it's an URL and load it, or an HTML document and charge it.<br />You can also send an array of documents to convert if parallel conversions is enabled on your account. In that case, you will also need to provide the `webhook` parameters as this operation is asynchronous.
-sandbox | false | Will generates documents that doesn't count in the credits. The generated document will come with a watermark.
-encode | false | Will return the generated PDF in Base64 encoded format, instead of raw.
-timeout |  null | If provided, will kill the page loading at a specified time without stopping with a TimeoutError. Value in seconds
-wait_for | null | Name of a function available globally. When present, PDFShift will wait for this function to return a truthy value (true, 1, a string, etc) or up to 30 seconds, then proceed to the conversion.
-landscape | false | Will set the view in landscape mode instead of portrait
-css | null | Will append this CSS styles to the document before saving it. Can be an URL or a String of CSS rules.
-javascript | null | Will execute the given Javascript before saving the document. Can be an URL or a String of JS code.
-disable_images | false | Images will not be included in the final document.
-disable_javascript | false | Will not execute the javascript at all in the document
-disable_links | false| The link in the document will not point anywhere.
-disable_backgrounds | false | The final document will not have the background images.
-delay | 0 | In milliseconds. Will wait for this duration before capturing the document. Up to 10 seconds max.
-use_print | false | Use the print stylesheet instead of the general one.
-format | A4 | Format of the document. You can either use the standard values (Letter, Legal, Tabloid, Ledger, A0, A1, A2, A3, A4, A5) or a custom `{width}x{height}` value. For {width} and {height}, you can indicate the following units: in, cm, mm.
-viewport | 1200x1024 | Viewport size. Defined as `width x height`. Default is 1200x1024.
-zoom | 1 | A value between 0 and 2. Allows you to increase the zoom in the document for specific purposes. 1 is the default zoom, lower is smaller, higher is bigger.
-webhook | null | An URL where we will send a POST request containing a JSON body similar to when you use the `filename` parameter. The JSON response will contain a `URL` key that points to your file, stored on Amazon S3.
-margin | null | Empty spaces between the outer and the beginning of the content
-auth | null | Object containing `username` and `password` for accessing password-protected content.
-cookies | null | List of cookies you want to send along with the requests when loading the source. See the related part at the bottom of the document
-http_headers | null | List of http headers that you can customize for a better end result.
-header | {"source": "&lt;div style="font-size: 12px"&gt;Pages {{page}} of {{total}}&lt;/div&gt;", "spacing": "150px"} | Defines a custom header. See the "Header/Footer" section for more details.
-footer | null | Same as header.
-protection | null | Will add restrictions on the PDF document. See the #Protection part for more details
-watermark | null | Add a watermark to the generated document. See the #Watermark part for more details.
+Parameter | Type | Default | Description
+--------- | --------- | ------- | -----------
+source | String or URL | **required** | Original document to convert to PDF. PDFShift will automatically detect if it's an URL and load it, or an HTML document and charge it.<br />You can also send an array of documents to convert if parallel conversions is enabled on your account. In that case, you will also need to provide the `webhook` parameters as this operation is asynchronous.
+sandbox | Boolean | false | Will generates documents that doesn't count in the credits. The generated document will come with a watermark.
+encode | Boolean | false | Will return the generated PDF in Base64 encoded format, instead of raw.
+timeout |  Integer | null | If provided, will kill the page loading at a specified time without stopping with a TimeoutError. Value in seconds
+wait_for | String | null | Name of a function available globally. When present, PDFShift will wait for this function to return a truthy value (true, 1, a string, etc) or up to 30 seconds, then proceed to the conversion.
+landscape | Boolean | false | Will set the view in landscape mode instead of portrait
+css | String or URL | null | Will append this CSS styles to the document before saving it. Can be an URL or a String of CSS rules.
+javascript | String or URL | null | Will execute the given Javascript before saving the document. Can be an URL or a String of JS code.
+disable_images | Boolean | false | Images will not be included in the final document.
+disable_javascript | Boolean | false | Will not execute the javascript at all in the document
+disable_links | Boolean | false| The link in the document will not point anywhere.
+disable_backgrounds | Boolean | false | The final document will not have the background images.
+delay | Integer | 0 | In milliseconds. Will wait for this duration before capturing the document. Up to 10 seconds max.
+use_print | Boolean | false | Use the print stylesheet instead of the general one.
+format | String | A4 | Format of the document. You can either use the standard values (Letter, Legal, Tabloid, Ledger, A0, A1, A2, A3, A4, A5) or a custom `{width}x{height}` value. For {width} and {height}, you can indicate the following units: in, cm, mm.
+zoom | Float | 1 | A value between 0 and 2. Allows you to increase the zoom in the document for specific purposes. 1 is the default zoom, lower is smaller, higher is bigger.
+webhook | String (URL) | null | An URL where we will send a POST request containing a JSON body similar to when you use the `filename` parameter. The JSON response will contain a `URL` key that points to your file, stored on Amazon S3.
+margin | String or Object | null | Empty spaces between the outer and the beginning of the content
+auth | Object | null | Object containing `username` and `password` for accessing password-protected content.
+cookies | Array | null | List of cookies you want to send along with the requests when loading the source. See the related part at the bottom of the document
+http_headers | Object | null | List of http headers that you can customize for a better end result.
+header | Object | null | Defines a custom header. See the "Header/Footer" section for more details.
+footer | Object | null | Same as header.
+protection | Object | null | Will add restrictions on the PDF document. See the #Protection part for more details
+watermark | Object | null | Add a watermark to the generated document. See the #Watermark part for more details.
 
 
 ### Cookies
 
 List of accepted parameters for the Cookie object.
 
-Parameter | Default | Description
---- | --- | ---
-name  | **required** | Name of the cookie
-value | ** required ** | Value for the specified cookie
-secure | false | If set to true, This cookie will only be available for secure (https) connections.
-http_only | false | If set to true, this cookie will only be available to HTTP request only (no javascript).
+Parameter | Type | Default | Description
+--- | --- | --- | ---
+name  | String | **required** | Name of the cookie
+value | String | ** required ** | Value for the specified cookie
+secure | Boolean | false | If set to true, This cookie will only be available for secure (https) connections.
+http_only | Boolean | false | If set to true, this cookie will only be available to HTTP request only (no javascript).
 
 
 ### Margin
@@ -69,12 +68,12 @@ You can either pass an object as defined below, or use a CSS like string, like t
 
 Otherwise, you can use an object to directly target a specific margin, using the following:
 
-Parameter | Default | Description
---- | --- | ---
-top | null | Space between the top and the content.
-right | null | Space between the right and the content.
-bottom | null | Space between the bottom and the content.
-left | null | Space between the left and the content.
+Parameter | Type | Default | Description
+--- | --- | --- | ---
+top | Integer or String | null | Space between the top and the content.
+right | Integer or String | null | Space between the right and the content.
+bottom | Integer or String | null | Space between the bottom and the content.
+left | Integer or String | null | Space between the left and the content.
 
 
 ### Header/Footer
@@ -88,10 +87,10 @@ As such, the CSS style defined in your body won't apply on your header/footer.<b
 To style your header/footer, you need to set a specific style either using &lt;style&gt; tag first, or adding <code>style=""</code> on your DOM elements.
 </aside>
 
-Parameter | Default | Description
---- | --- | ---
-source | null | Element to add in the header/footer part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.
-spacing | null | A spacing between the header or footer and the content. For header, it's the space between the header and the beginning of the document. For the footer, it's the space between the end of the document and the bottom of the page.
+Parameter | Type | Default | Description
+--- | --- | --- | ---
+source | String or URL | null | Element to add in the header/footer part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.
+spacing | Integer or String | null | A spacing between the header or footer and the content. For header, it's the space between the header and the beginning of the document. For the footer, it's the space between the end of the document and the bottom of the page.
 
 #### Header/Footer variables
 
@@ -115,14 +114,14 @@ This means that when the user password has been entered, some PDF reader ignore 
 So, setting a blank password for the user is similar to no security.
 </aside>
 
-Parameter | Default | Description
---- | --- | ---
-author | null | Document's author name
-user_password | null | A user who has the password will be able to view the document and perform operations allowed by the permission options
-owner_password | null | A user who has the password will have unlimited access to the PDF, including changing the passwords and permission options.
-no_print | false | When set to true, printing will be disabled.
-no_copy | false | When set to true, the possibility to copy any text will be disabled.
-no_modify | false | When set to true, the possibility to modify the document will be disabled.
+Parameter | Type | Default | Description
+--------- | ------- | ------- | -----------
+author | String | null | Document's author name
+user_password | String | null | A user who has the password will be able to view the document and perform operations allowed by the permission options
+owner_password | String | null | A user who has the password will have unlimited access to the PDF, including changing the passwords and permission options.
+no_print | Boolean | false | When set to true, printing will be disabled.
+no_copy | Boolean | false | When set to true, the possibility to copy any text will be disabled.
+no_modify | Boolean | false | When set to true, the possibility to modify the document will be disabled.
 
 
 ### Watermark
@@ -139,7 +138,7 @@ Each alternatives has a set of options, which is detailed here:
 #### Via PDF
 
 Parameter | Type | Default | Description
---------- | ------- | -----------
+--------- | ------- | ------- | -----------
 source | URL or Base64 encoded PDF content | **required** | You can provide the source either as an URL, or a **base 64 encoded** PDF content. Raw PDF content will be refused. We recommend you to send a one page PDF content because only the first page is used on each of your generated content.
 
 
@@ -836,7 +835,7 @@ pdfshift.prepare('https://httpbin.org/cookies')
 <?php
 $response = pdfshift('your_api_key_here', array (
     'source' => 'https://httpbin.org/cookies',
-    'cookies' => array ('name' => 'session', 'value' => '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac')
+    'cookies' => array(array ('name' => 'session', 'value' => '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac'))
 ));
 
 file_put_contents('result.pdf', $response);
@@ -850,7 +849,7 @@ response = requests.post(
     auth=('your_api_key_here', ''),
     json={
         'source': 'https://httpbin.org/cookies',
-        'cookies': {'name': 'session', 'value': '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac'}
+        'cookies': [{'name': 'session', 'value': '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac'}]
     },
     stream=True
 )
