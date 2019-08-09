@@ -127,10 +127,46 @@ no_modify | false | When set to true, the possibility to modify the document wil
 
 ### Watermark
 
-Adding a watermark to your document is easy with PDFShift.
+You can add a watermark to your documents via three alternatives:
 
-image:
-text:
+ * Via a PDF
+ * Via Text
+ * Via Image
+
+Each alternatives has a set of options, which is detailed here:
+
+
+#### Via PDF
+
+Parameter | Type | Default | Description
+--------- | ------- | -----------
+source | URL or Base64 encoded PDF content | **required** | You can provide the source either as an URL, or a **base 64 encoded** PDF content. Raw PDF content will be refused. We recommend you to send a one page PDF content because only the first page is used on each of your generated content.
+
+
+#### Via Text
+
+Parameter | Type | Default | Description
+--------- | ------- | ------- | -----------
+text | String | **required** | The text to display as watermark.
+font_size | Integer | 16 | The font size used.
+font_family | String | Helvetica | The font family used.
+font_color | String | 000000 | The color of the text.
+font_opacity | Integer | 100 | The opacity for the text.
+font_bold | Boolean | false | Set to true if you want the text bold.
+font_italic | Boolean | false | Set to true if you want the text in italic.
+offset_x | String | center | The X position. Can be either a String (left, center, right) or a number with unit (defaults to pixels. Allowed units are 'px', 'in', 'cm', 'mm', 'pt').
+offset_y | String | middle | The Y position. Can be either a string (top, middle, bottom) or a number with unit (defaults to pixels. Allowed units are 'px', 'in', 'cm', 'mm', 'pt').
+rotate | Integer | -45 | The degree for the rotated element.
+
+
+#### Via Image
+
+Parameter | Type | Default | Description
+--------- | ------- | ------- | -----------
+image | URL or Base64 encoded image content | **required** | The image to display as watermark.
+offset_x | String | center | The X position. Can be either a String (left, center, right) or a number with unit (defaults to pixels. Allowed units are 'px', 'in', 'cm', 'mm', 'pt').
+offset_y | String | middle | The Y position. Can be either a string (top, middle, bottom) or a number with unit (defaults to pixels. Allowed units are 'px', 'in', 'cm', 'mm', 'pt').
+rotate | Integer | -45 | The degree for the rotated element.
 
 
 ### Misc
