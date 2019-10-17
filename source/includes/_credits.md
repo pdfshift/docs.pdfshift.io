@@ -8,7 +8,7 @@
 {
   "total": 1000,
   "used": 150,
-  "remaingin": 850
+  "remaining": 850
 }
 ```
 
