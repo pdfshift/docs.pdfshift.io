@@ -1,5 +1,5 @@
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/sassc-2.2.1/ext
-/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-9236-15b9eoc.rb extconf.rb
+/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-21581-nkiewd.rb extconf.rb
 creating Makefile
 
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/sassc-2.2.1/ext
@@ -76,6 +76,6 @@ strip -x libsass.so
 
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/sassc-2.2.1/ext
 make "DESTDIR=" install
-/usr/bin/mkdir -p . ./.gem.20200115-9236-z1popa/sassc
+/usr/bin/mkdir -p . ./.gem.20200115-21581-f6u1oh/sassc
 exit > .sitearchdir.-.sassc.time
-/usr/bin/install -c -m 0755 libsass.so ./.gem.20200115-9236-z1popa/sassc
+/usr/bin/install -c -m 0755 libsass.so ./.gem.20200115-21581-f6u1oh/sassc

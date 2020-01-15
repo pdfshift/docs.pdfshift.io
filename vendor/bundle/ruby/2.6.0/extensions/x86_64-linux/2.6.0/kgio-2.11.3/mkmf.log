@@ -718,7 +718,7 @@ checked program was:
 /* end */
 
 "gcc -o conftest -I/usr/include -I/usr/include/ruby/backward -I/usr/include -I.    -D_GNU_SOURCE -DPOSIX_C_SOURCE=1-D_POSIX_C_SOURCE=200112L -O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -fPIC conftest.c  -L. -L/usr/lib64 -L. -Wl,-z,relro -Wl,--as-needed  -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -fstack-protector-strong -rdynamic -Wl,-export-dynamic  -m64  -lrt  -lruby -lrt  -lm   -lc"
-/usr/bin/ld: /tmp/ccVfdQjp.o: in function `t':
+/usr/bin/ld: /tmp/cceQg7SL.o: in function `t':
 /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/kgio-2.11.3/ext/kgio/conftest.c:15: undefined reference to `rb_thread_blocking_region'
 collect2: erreur: ld a retourné le statut de sortie 1
 checked program was:

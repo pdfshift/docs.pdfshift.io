@@ -1,5 +1,5 @@
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/fast_blank-1.0.0/ext/fast_blank
-/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-28130-abdj70.rb extconf.rb
+/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-21581-ni21ug.rb extconf.rb
 creating Makefile
 
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/fast_blank-1.0.0/ext/fast_blank
@@ -15,6 +15,6 @@ gcc -shared -o fast_blank.so fast_blank.o -L. -L/usr/lib64 -L. -Wl,-z,relro -Wl,
 
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/fast_blank-1.0.0/ext/fast_blank
 make "DESTDIR=" install
-/usr/bin/mkdir -p . ./.gem.20200115-28130-1qs4rnf
+/usr/bin/mkdir -p . ./.gem.20200115-21581-cmm20f
 exit > .sitearchdir.time
-/usr/bin/install -c -m 0755 fast_blank.so ./.gem.20200115-28130-1qs4rnf
+/usr/bin/install -c -m 0755 fast_blank.so ./.gem.20200115-21581-cmm20f

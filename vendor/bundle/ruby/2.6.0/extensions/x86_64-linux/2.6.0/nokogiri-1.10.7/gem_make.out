@@ -1,5 +1,5 @@
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.7/ext/nokogiri
-/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-9236-n6oz17.rb extconf.rb
+/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-21581-mkcpsz.rb extconf.rb
 checking if the C compiler accepts ... yes
 Building nokogiri using packaged libraries.
 Using mini_portile version 2.4.0
@@ -136,6 +136,6 @@ rm -rf /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/no
 
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/nokogiri-1.10.7/ext/nokogiri
 make "DESTDIR=" install
-/usr/bin/mkdir -p . ./.gem.20200115-9236-1ztzjm/nokogiri
+/usr/bin/mkdir -p . ./.gem.20200115-21581-1hj0da3/nokogiri
 exit > .sitearchdir.-.nokogiri.time
-/usr/bin/install -c -m 0755 nokogiri.so ./.gem.20200115-9236-1ztzjm/nokogiri
+/usr/bin/install -c -m 0755 nokogiri.so ./.gem.20200115-21581-1hj0da3/nokogiri

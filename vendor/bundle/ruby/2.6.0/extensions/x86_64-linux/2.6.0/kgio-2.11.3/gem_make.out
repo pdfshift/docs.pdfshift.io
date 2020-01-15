@@ -1,5 +1,5 @@
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/kgio-2.11.3/ext/kgio
-/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-20145-h6azl3.rb extconf.rb
+/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-21581-xclrhd.rb extconf.rb
 checking for CLOCK_MONOTONIC in time.h... yes
 checking for clockid_t in time.h... yes
 checking for clock_gettime() in -lrt... yes
@@ -59,6 +59,6 @@ gcc -shared -o kgio_ext.so accept.o autopush.o connect.o kgio_ext.o poll.o read.
 
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/kgio-2.11.3/ext/kgio
 make "DESTDIR=" install
-/usr/bin/mkdir -p . ./.gem.20200115-20145-131bdcg
+/usr/bin/mkdir -p . ./.gem.20200115-21581-5oh5uk
 exit > .sitearchdir.time
-/usr/bin/install -c -m 0755 kgio_ext.so ./.gem.20200115-20145-131bdcg
+/usr/bin/install -c -m 0755 kgio_ext.so ./.gem.20200115-21581-5oh5uk

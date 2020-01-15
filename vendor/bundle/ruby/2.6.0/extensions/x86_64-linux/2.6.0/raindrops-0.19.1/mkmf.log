@@ -2352,7 +2352,7 @@ Dans le fichier inclus depuis /usr/include/bits/libc-header-start.h:33,
 /usr/include/features.h:185:3: attention: #warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE" [-Wcpp]
   185 | # warning "_BSD_SOURCE and _SVID_SOURCE are deprecated, use _DEFAULT_SOURCE"
       |   ^~~~~~~
-/usr/bin/ld: /tmp/ccZ3VMkA.o: in function `t':
+/usr/bin/ld: /tmp/ccQJhYGJ.o: in function `t':
 /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/raindrops-0.19.1/ext/raindrops/conftest.c:15: undefined reference to `rb_thread_blocking_region'
 collect2: erreur: ld a retourné le statut de sortie 1
 checked program was:

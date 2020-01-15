@@ -1,5 +1,5 @@
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/ffi-1.12.1/ext/ffi_c
-/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-9236-bmvu8q.rb extconf.rb
+/usr/bin/ruby -I /usr/share/rubygems -r ./siteconf20200115-21581-11xd5u2.rb extconf.rb
 checking for ffi_call() in -lffi... yes
 checking for ffi_closure_alloc()... yes
 checking for shlwapi.h... no
@@ -138,6 +138,6 @@ gcc -shared -o ffi_c.so AbstractMemory.o ArrayType.o Buffer.o Call.o ClosurePool
 
 current directory: /home/cx42/www/pdfshift/docs.pdfshift.io/vendor/bundle/ruby/2.6.0/gems/ffi-1.12.1/ext/ffi_c
 make "DESTDIR=" install
-/usr/bin/mkdir -p . ./.gem.20200115-9236-18rew5d
+/usr/bin/mkdir -p . ./.gem.20200115-21581-vcvzl5
 exit > .sitearchdir.time
-/usr/bin/install -c -m 0755 ffi_c.so ./.gem.20200115-9236-18rew5d
+/usr/bin/install -c -m 0755 ffi_c.so ./.gem.20200115-21581-vcvzl5

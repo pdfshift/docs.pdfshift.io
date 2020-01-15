@@ -130,7 +130,7 @@ DEPENDENCIES
   rack (= 2.1.1)
   redcarpet (= 3.5.0)
   rouge (= 3.15.0)
-  unicorn-rails
+  unicorn-rails (= 2.2.1)
 
 RUBY VERSION
    ruby 2.3.3p222
