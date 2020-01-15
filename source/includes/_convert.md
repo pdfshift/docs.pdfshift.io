@@ -32,6 +32,8 @@ disable_backgrounds | Boolean | false | The final document will not have the bac
 delay | Integer | 0 | In milliseconds. Will wait for this duration before capturing the document. Up to 10 seconds max.
 use_print | Boolean | false | Use the print stylesheet instead of the general one.
 format | String | A4 | Format of the document. You can either use the standard values (Letter, Legal, Tabloid, Ledger, A0, A1, A2, A3, A4, A5) or a custom `{width}x{height}` value. For {width} and {height}, you can indicate the following units: in, cm, mm.
+pages | String | null | Set the pages to be printed. First page is 1. You can set a range like '1-5', a list like '1,2,3' and combine them : '1-5,9,10'. If the highest number is more than the real number of pages, it will be ignored.
+remove_blank | Boolean | false | Remove the last page if it is blank. It does so by checking its content and ensuring there are no text or images.
 zoom | Float | 1 | A value between 0 and 2. Allows you to increase the zoom in the document for specific purposes. 1 is the default zoom, lower is smaller, higher is bigger.
 webhook | String (URL) | null | An URL where we will send a POST request containing a JSON body similar to when you use the `filename` parameter. The JSON response will contain a `URL` key that points to your file, stored on Amazon S3.
 margin | String or Object | null | Empty spaces between the outer and the beginning of the content
@@ -91,6 +93,7 @@ Parameter | Type | Default | Description
 --- | --- | --- | ---
 source | String or URL | null | Element to add in the header/footer part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.
 spacing | Integer or String | null | A spacing between the header or footer and the content. For header, it's the space between the header and the beginning of the document. For the footer, it's the space between the end of the document and the bottom of the page.
+start_at | Integer | 1 | Start to display the header/footer at that given page. **Important**: If you send header AND footer, and set a start_at higher than 1, it must be the same for header and footer. For instance, `header.start_at = 1` and `footer.start_at = 5` is possible. But `header.start_at = 2` and `footer.start_at = 3` is NOT possible.
 
 #### Header/Footer variables
 
