@@ -1,1 +1,0 @@
-require "unicorn_rails"
