@@ -1442,7 +1442,7 @@ To style your header/footer, you need to set a specific style either using &lt;s
 <td>Element to add in the header/footer part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.</td>
 </tr>
 <tr>
-<td>spacing</td>
+<td>height</td>
 <td>Integer or String</td>
 <td>null</td>
 <td>A spacing between the header or footer and the content. For header, it's the space between the header and the beginning of the document. For the footer, it's the space between the end of the document and the bottom of the page.</td>
@@ -2871,7 +2871,7 @@ This is useful to add page number for instance, or the name of your company at t
                         <pre><code class="language-javascript">// Use the code available at
 // https://gist.github.com/cnicodeme/28ade69b269ca0a4af0a7c29c479b747
 
-pdfshift.convert('your_api_key', { source: 'https://www.example.com', footer: { source: '&lt;div&gt;Page {{page}} of {{total}}&lt;/div&gt;', spacing: '50px' } }).then(function (response) {
+pdfshift.convert('your_api_key', { source: 'https://www.example.com', footer: { source: '&lt;div&gt;Page {{page}} of {{total}}&lt;/div&gt;', height: '50px' } }).then(function (response) {
     fs.writeFileSync('footer.pdf', response.data, "binary", function () {})
 })
 
@@ -2883,7 +2883,7 @@ $response = pdfshift('your_api_key', array (
     'source' =&gt; 'https://www.example.com',
     'footer' =&gt; array (
         'source' =&gt; '&lt;div style="font-size: 12px"&gt;Page {{ "{{page}}" }} of {{ "{{total}}" }}&lt;/div&gt;',
-        'spacing' =&gt; '50px'
+        'height' =&gt; '50px'
     )
 ));
 
@@ -2900,7 +2900,7 @@ response = requests.post(
         'source': 'https://www.example.com',
         'footer': {
             'source': '&lt;div style="font-size: 12px"&gt;Page {{ "{{page}}" }} of {{ "{{total}}" }}&lt;/div&gt;',
-            'spacing': '50px'
+            'height': '50px'
         }
     },
     stream=True
@@ -2922,7 +2922,7 @@ uri = URI("https://api.pdfshift.io/v3/convert/pdf")
 data = {"source" =&gt; "https://www.example.com",
     'footer' =&gt; {
         'source' =&gt; '&lt;div style="font-size: 12px"&gt;Page {{ "{{page}}" }} of {{ "{{total}}" }}&lt;/div&gt;',
-        'spacing' =&gt; '50px'
+        'height' =&gt; '50px'
     } }
 
 Net::HTTP.start(uri.host, uri.port, :use_ssl =&gt; true) do |http|
@@ -2950,7 +2950,7 @@ end
 
     var footer = new JSONObject();
     footer.put("source", "&lt;div style='font-size: 12px'&gt;Page {{ "{{page}}" }} of {{ "{{total}}" }}&lt;/div&gt;");
-    footer.put("spacing", "50px");
+    footer.put("height", "50px");
 
     jsonObject.put("footer", footer);
 
@@ -2990,7 +2990,7 @@ end
     var json = new
     {
         source = "https://www.example.com",
-        footer = new { source = "&lt;div style=\"font-size: 12px\"&gt;Page {{ "{{page}}" }} of {{ "{{total}}" }}&lt;/div&gt;", spacing = "50px" }
+        footer = new { source = "&lt;div style=\"font-size: 12px\"&gt;Page {{ "{{page}}" }} of {{ "{{total}}" }}&lt;/div&gt;", height = "50px" }
     };
     request.AddJsonBody(json);
 
@@ -3024,7 +3024,7 @@ func main() {
         "source": "https://www.example.com",
         "footer": map[string]string{
             "source": "&lt;div style='font-size: 12px'&gt;Page {{ "{{page}}" }} of {{ "{{total}}" }}&lt;/div&gt;",
-            "spacing": "50px",
+            "height": "50px",
         },
     }
 
