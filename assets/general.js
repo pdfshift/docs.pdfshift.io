@@ -37,13 +37,10 @@
         const containerRect = container.getBoundingClientRect()
 
         if ((elementRect.top + elementRect.height) > containerRect.bottom) {
-            console.log('not visible')
             return false
         } else if ((elementRect.bottom - elementRect.height) < containerRect.top) {
-            console.log('not visible')
             return false
         }
-        console.log('VIsible')
         return true
     }
 
@@ -119,6 +116,11 @@
                 scrollToPosition(window, getOffsetTop(targetElement), 'smooth').then(function () {
                     isScrolling = false
                 })
+            }
+
+            const parentTarget = document.querySelector('.main>aside')
+            if (parentTarget.classList.contains('visible')) {
+                parentTarget.classList.remove('visible')
             }
         })
     })
@@ -211,5 +213,18 @@
     })
     document.querySelectorAll('section .method-examples .code-sample').forEach(function (item) {
         item.classList.add('visible')
+    })
+
+    const menuClickHandler = function (event) {
+        event.currentTarget.classList.remove('visible')
+        event.currentTarget.removeEventListener('click', menuClickHandler)
+    }
+
+    // Menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', function (event) {
+        const target = document.querySelector('.main>aside')
+        target.classList.add('visible')
+        event.currentTarget.classList.remove('visible')
+        target.addEventListener('click', menuClickHandler)
     })
 })();

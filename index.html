@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
     <head>
         <meta charset="utf-8">
         <title>PDFShift API Documentation v3.0</title>
@@ -42,6 +42,12 @@
     </head>
     <body>
         <div class="api-reference">
+            <a href="javascript:;" title="View the menu" id="menu-toggle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </a>
+
             <div class="main">
                 <aside>
                     <div class="brand">
@@ -1413,12 +1419,12 @@ You can either pass an object as defined below, or use a CSS like string, like t
         </h3>
         <div class="description-pre">
             <p>You can configure the aspect of your header and footer document using the following values.</p>
-<aside class="notice">
+<div class="alert alert-notice">
 The footer and header are <strong>independant</strong> from the rest of the document.<br/>
 <br/>
 As such, the CSS style defined in your body won't apply on your header/footer.<br/>
 To style your header/footer, you need to set a specific style either using &lt;style&gt; tag first, or adding <code>style=""</code> on your DOM elements.
-</aside>
+</div>
 <table>
 <thead>
 <tr>
@@ -1522,12 +1528,11 @@ To style your header/footer, you need to set a specific style either using &lt;s
         </h3>
         <div class="description-pre">
             <p>You can restrict access to your generated document using the following rules. The encryption is made in 128bits.</p>
-<aside class="warning">
-Some PDF Reader don't make the distinction between <strong>user</strong> and <strong>owner</strong> in a PDF Document.
-This means that when the user password has been entered, some PDF reader ignore the restrictions (no print, no copy, etc).<br/>
-<br/>
-So, setting a blank password for the user is similar to no security.
-</aside>
+<div class="alert alert-warning">
+<p>Some PDF Reader don't make the distinction between <strong>user</strong> and <strong>owner</strong> in a PDF Document.
+This means that when the user password has been entered, some PDF reader ignore the restrictions (no print, no copy, etc).</p>
+<p>So, setting a blank password for the user is similar to no security.</p>
+</div>
 <table>
 <thead>
 <tr>
