@@ -1,592 +1,598 @@
 {
-    "swagger" : "2.0",
-    "info" : {
-      "description" : "This is the documentation for the PDFShift API.\n\nOur aim here is to provide you with a clear, concise and complete set of tool to generate the PDF you want.\n\nDon't forget to add the \"`sandbox`\" parameter to `True` while testing the API. This won't use your credits and generate free PDF (with a watermark).",
-      "version" : "3.0.0",
-      "title" : "PDFShift API Documentation",
-      "termsOfService" : "[Click here to see our Terms of service](https://pdfshift.io/terms)",
-      "contact" : {
-        "name" : "PDFShift",
-        "url" : "https://pdfshift.io",
-        "email" : "support@pdfshift.io"
-      }
-    },
-    "host" : "api.pdfshift.io",
-    "basePath" : "/v3",
-    "schemes" : [ "https" ],
-    "consumes" : [ "application/json" ],
-    "produces" : [ "application/json" ],
-    "security" : [ {
-      "Basic authentication" : [ ]
-    } ],
-    "tags": [
-        {
-            "name": "convert",
-            "description": "Convert endpoint for PDFShfit"
-        },
-        {
-          "name": "credits",
-          "description": "Credits endpoint for PDFShfit"
-       }
-    ],
-    "paths" : {
-      "/convert/pdf" : {
-        "post" : {
-          "summary" : "Converts an HTML document to PDF",
-          "tags": [ "convert" ],
-          "consumes" : [ "application/json" ],
-          "parameters" : [ {
-            "name" : "body",
-            "in" : "body",
-            "required" : true,
-            "schema" : {
-              "type" : "object",
-              "required" : [ "source" ],
-              "properties" : {
-                "source" : {
-                  "type" : "string",
-                  "description" : "Original document to convert to PDF. PDFShift will automatically detect if it's an URL and load it, or an HTML document and charge it.\nYou can also send an array of documents to convert if parallel conversions is enabled on your account. In that case, you will also need to provide the `webhook` parameters as this operation is asynchronous.",
-                  "example" : "https://pdfshift.io/documentation"
-                },
-                "sandbox" : {
-                  "type" : "boolean",
-                  "description" : "Will generates documents that doesn't count in the credits. The generated document will come with a watermark.",
-                  "default" : false,
-                  "example" : true
-                },
-                "encode" : {
-                  "type" : "boolean",
-                  "description" : "Will return the generated PDF in Base64 encoded format, instead of raw.",
-                  "default" : false,
-                  "example" : true
-                },
-                "filename": {
-                  "type": "string",
-                  "description": "Name of the destination file. If given, the response **will not** be the PDF, but a JSON response containing an `url` parameter to an Amazon S3 bucket, to download the file. The file will be kept for 2 days, then automatically deleted. See [Saving the document to Amazon S3](#saving-the-document-to-amazon-s3) for an example.",
-                  "default": null,
-                  "example": "invoice.pdf"
-                },
-                "s3_destination": {
-                  "type": "string",
-                  "description": "Path to your S3 bucket, in order to save the converted PDF directly into your AWS S3 account. See [Saving to your Amazon S3](#saving-to-amazon-s3) for more details. Use a full path value like `s3://doc-example-bucket/pdfshift/upload/86aa3ede7d05.pdf`.",
-                  "default": null,
-                  "example": "s3://doc-example-bucket/pdfshift/upload/86aa3ede7d05.pdf"
-                },
-                "timeout" : {
-                  "type" : "number",
-                  "description" : "If provided, will kill the page loading at a specified time without stopping with a TimeoutError. Value in seconds.",
-                  "example" : 15
-                },
-                "wait_for": {
-                  "type": "string",
-                  "description": "Name of a function available globally. When present, PDFShift will wait for this function to return a truthy value (true, 1, a string, etc) or up to 30 seconds, then proceed to the conversion.",
-                  "default": null,
-                  "example": "is_pdfshift_ready"
-                },
-                "landscape" : {
-                  "type" : "boolean",
-                  "description" : "Will set the view in landscape mode instead of portrait.",
-                  "default" : false,
-                  "example" : true
-                },
-                "css" : {
-                  "type" : "string",
-                  "description" : "Will append this CSS styles to the document before saving it. Can be an URL or a String of CSS rules.",
-                  "example" : "h2 {page-break-before: always; page-break-after: avoid}"
-                },
-                "javascript" : {
-                  "type" : "string",
-                  "description" : "Will execute the given Javascript before saving the document. Can be an URL or a String of JS code.",
-                  "example" : "document.getElementById(\"social-networks\").style.display = \"none\";"
-                },
-                "disable_images" : {
-                  "type" : "boolean",
-                  "description" : "Images will not be included in the final document.",
-                  "default" : false,
-                  "example" : true
-                },
-                "disable_javascript" : {
-                  "type" : "boolean",
-                  "description" : "Will not execute the javascript at all in the document.",
-                  "default" : false,
-                  "example" : true
-                },
-                "disable_links" : {
-                  "type" : "boolean",
-                  "description" : "The link in the document will not point anywhere.",
-                  "default" : false,
-                  "example" : true
-                },
-                "disable_backgrounds" : {
-                  "type" : "boolean",
-                  "description" : "The final document will not have the background images.",
-                  "default" : false,
-                  "example" : true
-                },
-                "remove_blank": {
-                  "type" : "boolean",
-                  "description" : "Remove the last page if it is considered empty.",
-                  "default" : false,
-                  "example" : true
-                },
-                "delay" : {
-                  "type" : "number",
-                  "description" : "In milliseconds. Will wait for this duration before capturing the document. Up to 10 seconds max.",
-                  "example" : 2000
-                },
-                "use_print" : {
-                  "type" : "boolean",
-                  "description" : "Use the print stylesheet instead of the general one.",
-                  "default" : false,
-                  "example" : true
-                },
-                "format" : {
-                  "type" : "string",
-                  "description" : "Format of the document. You can either use the standard values (Letter, Legal, Tabloid, Ledger, A0, A1, A2, A3, A4, A5) or a custom `{width}x{height}` value. For {width} and {height}, you can indicate the following units: in, cm, mm.",
-                  "default" : "A4",
-                  "enum" : [ "Letter", "Legal", "Tabloid", "Ledger", "A0", "A1", "A2", "A3", "A4", "A5", "{width}x{height}" ],
-                  "example" : "Ledger"
-                },
-                "pages": {
-                  "type" : "string",
-                  "description" : "Pages to print. Can be one number (`3`), a range (`1-5`), a list (`4,5,6`) or a combination of both (`1-3,6,7`). If the number is higher than the real number of pages, that number will be ignored.",
-                  "default" : null,
-                  "example" : "1-3,6,7"
-                },
-                "zoom" : {
-                  "type" : "number",
-                  "description" : "A value between 0 and 2. Allows you to increase the zoom in the document for specific purposes. 1 is the default zoom, lower is smaller, higher is bigger.",
-                  "example" : 0.8
-                },
-                "margin" : {
-                  "type" : "object",
-                  "description" : "Empty spaces between the outer and the beginning of the content. See the [Margin](#margin) section for more details.",
-                  "properties" : {
-                    "top" : {
-                      "type" : "string",
-                      "description" : "Space between the top and the content.",
-                      "example" : "15px"
-                    },
-                    "right" : {
-                      "type" : "string",
-                      "description" : "Space between the right and the content.",
-                      "example" : "15px"
-                    },
-                    "bottom" : {
-                      "type" : "string",
-                      "description" : "Space between the bottom and the content.",
-                      "example" : "15px"
-                    },
-                    "left" : {
-                      "type" : "string",
-                      "description" : "Space between the left and the content.",
-                      "example" : "15px"
-                    }
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is the documentation for the PDFShift API.\n\nOur aim here is to provide you with a clear, concise and complete set of tool to generate the PDF you want.\n\nDon't forget to add the \"`sandbox`\" parameter to `True` while testing the API. This won't use your credits and generate free PDF (with a watermark).",
+    "version" : "3.0.0",
+    "title" : "PDFShift API Documentation",
+    "termsOfService" : "[Click here to see our Terms of service](https://pdfshift.io/terms)",
+    "contact" : {
+      "name" : "PDFShift",
+      "url" : "https://pdfshift.io",
+      "email" : "support@pdfshift.io"
+    }
+  },
+  "host" : "api.pdfshift.io",
+  "basePath" : "/v3",
+  "schemes" : [ "https" ],
+  "consumes" : [ "application/json" ],
+  "produces" : [ "application/json" ],
+  "security" : [ {
+    "Basic authentication" : [ ]
+  } ],
+  "tags": [
+      {
+          "name": "convert",
+          "description": "Convert endpoint for PDFShfit"
+      },
+      {
+        "name": "credits",
+        "description": "Credits endpoint for PDFShfit"
+     }
+  ],
+  "paths" : {
+    "/convert/pdf" : {
+      "post" : {
+        "summary" : "Converts an HTML document to PDF",
+        "tags": [ "convert" ],
+        "consumes" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "body",
+          "in" : "body",
+          "required" : true,
+          "schema" : {
+            "type" : "object",
+            "required" : [ "source" ],
+            "properties" : {
+              "source" : {
+                "type" : "string",
+                "description" : "Original document to convert to PDF. PDFShift will automatically detect if it's an URL and load it, or an HTML document and charge it.\nYou can also send an array of documents to convert if parallel conversions is enabled on your account. In that case, you will also need to provide the `webhook` parameters as this operation is asynchronous.",
+                "example" : "https://pdfshift.io/documentation"
+              },
+              "sandbox" : {
+                "type" : "boolean",
+                "description" : "Will generates documents that doesn't count in the credits. The generated document will come with a watermark.",
+                "default" : false,
+                "example" : true
+              },
+              "encode" : {
+                "type" : "boolean",
+                "description" : "Will return the generated PDF in Base64 encoded format, instead of raw.",
+                "default" : false,
+                "example" : true
+              },
+              "filename": {
+                "type": "string",
+                "description": "Name of the destination file. If given, the response **will not** be the PDF, but a JSON response containing an `url` parameter to an Amazon S3 bucket, to download the file. The file will be kept for 2 days, then automatically deleted. See [Saving the document to Amazon S3](#saving-the-document-to-amazon-s3) for an example.",
+                "default": null,
+                "example": "invoice.pdf"
+              },
+              "webhook": {
+                "type": "string",
+                "description": "An URL where we will send a POST request containing a JSON body similar to when you use the filename parameter. The JSON response will contain a URL key that points to your file, stored on Amazon S3.",
+                "default": null,
+                "example": "http://www.website.com/webhooks/pdfshift"
+              },
+              "s3_destination": {
+                "type": "string",
+                "description": "Path to your S3 bucket, in order to save the converted PDF directly into your AWS S3 account. See [Saving to your Amazon S3](#saving-to-amazon-s3) for more details. Use a full path value like `s3://doc-example-bucket/pdfshift/upload/86aa3ede7d05.pdf`.",
+                "default": null,
+                "example": "s3://doc-example-bucket/pdfshift/upload/86aa3ede7d05.pdf"
+              },
+              "timeout" : {
+                "type" : "number",
+                "description" : "If provided, will kill the page loading at a specified time without stopping with a TimeoutError. Value in seconds.",
+                "example" : 15
+              },
+              "wait_for": {
+                "type": "string",
+                "description": "Name of a function available globally. When present, PDFShift will wait for this function to return a truthy value (true, 1, a string, etc) or up to 30 seconds, then proceed to the conversion.",
+                "default": null,
+                "example": "is_pdfshift_ready"
+              },
+              "landscape" : {
+                "type" : "boolean",
+                "description" : "Will set the view in landscape mode instead of portrait.",
+                "default" : false,
+                "example" : true
+              },
+              "css" : {
+                "type" : "string",
+                "description" : "Will append this CSS styles to the document before saving it. Can be an URL or a String of CSS rules.",
+                "example" : "h2 {page-break-before: always; page-break-after: avoid}"
+              },
+              "javascript" : {
+                "type" : "string",
+                "description" : "Will execute the given Javascript before saving the document. Can be an URL or a String of JS code.",
+                "example" : "document.getElementById(\"social-networks\").style.display = \"none\";"
+              },
+              "disable_images" : {
+                "type" : "boolean",
+                "description" : "Images will not be included in the final document.",
+                "default" : false,
+                "example" : true
+              },
+              "disable_javascript" : {
+                "type" : "boolean",
+                "description" : "Will not execute the javascript at all in the document.",
+                "default" : false,
+                "example" : true
+              },
+              "disable_links" : {
+                "type" : "boolean",
+                "description" : "The link in the document will not point anywhere.",
+                "default" : false,
+                "example" : true
+              },
+              "disable_backgrounds" : {
+                "type" : "boolean",
+                "description" : "The final document will not have the background images.",
+                "default" : false,
+                "example" : true
+              },
+              "remove_blank": {
+                "type" : "boolean",
+                "description" : "Remove the last page if it is considered empty.",
+                "default" : false,
+                "example" : true
+              },
+              "delay" : {
+                "type" : "number",
+                "description" : "In milliseconds. Will wait for this duration before capturing the document. Up to 10 seconds max.",
+                "example" : 2000
+              },
+              "use_print" : {
+                "type" : "boolean",
+                "description" : "Use the print stylesheet instead of the general one.",
+                "default" : false,
+                "example" : true
+              },
+              "format" : {
+                "type" : "string",
+                "description" : "Format of the document. You can either use the standard values (Letter, Legal, Tabloid, Ledger, A0, A1, A2, A3, A4, A5) or a custom `{width}x{height}` value. For {width} and {height}, you can indicate the following units: in, cm, mm.",
+                "default" : "A4",
+                "enum" : [ "Letter", "Legal", "Tabloid", "Ledger", "A0", "A1", "A2", "A3", "A4", "A5", "{width}x{height}" ],
+                "example" : "Ledger"
+              },
+              "pages": {
+                "type" : "string",
+                "description" : "Pages to print. Can be one number (`3`), a range (`1-5`), a list (`4,5,6`) or a combination of both (`1-3,6,7`). If the number is higher than the real number of pages, that number will be ignored.",
+                "default" : null,
+                "example" : "1-3,6,7"
+              },
+              "zoom" : {
+                "type" : "number",
+                "description" : "A value between 0 and 2. Allows you to increase the zoom in the document for specific purposes. 1 is the default zoom, lower is smaller, higher is bigger.",
+                "example" : 0.8
+              },
+              "margin" : {
+                "type" : "object",
+                "description" : "Empty spaces between the outer and the beginning of the content. See the [Margin](#margin) section for more details.",
+                "properties" : {
+                  "top" : {
+                    "type" : "string",
+                    "description" : "Space between the top and the content.",
+                    "example" : "15px"
                   },
-                  "example" : "{\"top\": \"15px\", \"left\": \"15px\", \"right\": \"15px\", \"bottom\": \"15px\"}"
-                },
-                "auth" : {
-                  "type" : "object",
-                  "description" : "Object containing `username` and `password` for accessing password-protected content.",
-                  "properties" : {
-                    "username" : {
-                      "type" : "string",
-                      "description" : "Username value from the Basic Authentication scheme.",
-                      "example" : "admin"
-                    },
-                    "password" : {
-                      "type" : "string",
-                      "description" : "Password value from the Basic Authentication scheme.",
-                      "example" : "S3cret"
-                    }
+                  "right" : {
+                    "type" : "string",
+                    "description" : "Space between the right and the content.",
+                    "example" : "15px"
                   },
-                  "example" : "{\"username\": \"admin\", \"password\": \"r00t\"}"
+                  "bottom" : {
+                    "type" : "string",
+                    "description" : "Space between the bottom and the content.",
+                    "example" : "15px"
+                  },
+                  "left" : {
+                    "type" : "string",
+                    "description" : "Space between the left and the content.",
+                    "example" : "15px"
+                  }
                 },
-                "cookies" : {
-                  "type" : "array",
-                  "description" : "List of cookies you want to send along with the requests when loading the source. They must be provided as an array of objects with the following properties:",
-                  "items": {
-                    "minItems": 0,
-                    "type": "object",
-                    "required" : [ "name", "value" ],
+                "example" : "{\"top\": \"15px\", \"left\": \"15px\", \"right\": \"15px\", \"bottom\": \"15px\"}"
+              },
+              "auth" : {
+                "type" : "object",
+                "description" : "Object containing `username` and `password` for accessing password-protected content.",
+                "properties" : {
+                  "username" : {
+                    "type" : "string",
+                    "description" : "Username value from the Basic Authentication scheme.",
+                    "example" : "admin"
+                  },
+                  "password" : {
+                    "type" : "string",
+                    "description" : "Password value from the Basic Authentication scheme.",
+                    "example" : "S3cret"
+                  }
+                },
+                "example" : "{\"username\": \"admin\", \"password\": \"r00t\"}"
+              },
+              "cookies" : {
+                "type" : "array",
+                "description" : "List of cookies you want to send along with the requests when loading the source. They must be provided as an array of objects with the following properties:",
+                "items": {
+                  "minItems": 0,
+                  "type": "object",
+                  "required" : [ "name", "value" ],
+                  "properties" : {
+                    "name" : {
+                      "type" : "string",
+                      "description" : "Name of the cookie.",
+                      "example" : "session"
+                    },
+                    "value" : {
+                      "type" : "string",
+                      "description" : "Value for the specified cookie.",
+                      "example" : "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+                    },
+                    "secure" : {
+                      "type" : "boolean",
+                      "description" : "If set to true, This cookie will only be available for secure (https) connections.",
+                      "default" : false,
+                      "example" : true
+                    },
+                    "http_only" : {
+                      "type" : "boolean",
+                      "description" : "If set to true, this cookie will only be available to HTTP request only (no javascript).",
+                      "default" : false,
+                      "example" : true
+                    }
+                  }
+                },
+                "example" : "[{\"name\": \"session\", \"value\": \"xxx-xxxx-xxxx\"}]"
+              },
+              "http_headers" : {
+                "type" : "object",
+                "description" : "List of HTTP headers that you can pass to the request.",
+                "example" : "{\"Content-Type\": \"text/html; charset=utf-8\", \"user-agent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\"}"
+              },
+              "header" : {
+                "required" : [ "source" ],
+                "type" : "object",
+                "description" : "Defines a custom header. See the [Header/Footer](#header-footer) section for more details.",
+                "properties" : {
+                  "source" : {
+                    "type" : "string",
+                    "description" : "Element to add in the header part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.\n\nAccepted variables are:\n\n| Variable | Description |\n| --- | --- |\n| **{{date}}** | Formatted print date |\n| **{{title}}** | Title of the HTML document |\n| **{{url}}** | Page URL |\n| **{{page}}** | Current page |\n| **{{total}}** | Total number of pages |",
+                    "example" : "<h1>{{ title }}</h1>"
+                  },
+                  "height" : {
+                    "type" : "string",
+                    "description" : "A spacing between the header and the content.",
+                    "example" : "150px"
+                  }
+                }
+              },
+              "footer" : {
+                "required" : [ "source" ],
+                "type" : "object",
+                "description" : "Same as header (See the [Header/Footer](#header-footer) section for more details).",
+                "properties" : {
+                  "source" : {
+                    "type" : "string",
+                    "description" : "Element to add in the footer part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.\n\nAccepted variables are:\n\n| Variable | Description |\n| --- | --- |\n| **{{date}}** | Formatted print date |\n| **{{title}}** | Title of the HTML document |\n| **{{url}}** | Page URL |\n| **{{page}}** | Current page |\n| **{{total}}** | Total number of pages |",
+                    "example" : "<div>Page {{page}} of {{total}}</div>"
+                  },
+                  "height" : {
+                    "type" : "string",
+                    "description" : "Space between the body and the footer",
+                    "example" : "150px"
+                  }
+                }
+              },
+              "protection" : {
+                "required" : [ "owner_password", "user_password" ],
+                "type" : "object",
+                "description" : "Will add restrictions on the PDF document. See the [Protection](#protection) section for more details.",
+                "properties" : {
+                  "author" : {
+                    "type" : "string",
+                    "description" : "Document's author name.",
+                    "example" : "Richard Hendricks"
+                  },
+                  "user_password" : {
+                    "type" : "string",
+                    "description" : "A user who has the password will be able to view the document and perform operations allowed by the permission options.",
+                    "example" : "super-user-password"
+                  },
+                  "owner_password" : {
+                    "type" : "string",
+                    "description" : "A user who has the password will have unlimited access to the PDF, including changing the passwords and permission options.",
+                    "example" : "super-owner-password"
+                  },
+                  "no_print" : {
+                    "type" : "boolean",
+                    "description" : "When set to true, printing will be disabled.",
+                    "default" : false,
+                    "example" : true
+                  },
+                  "no_copy" : {
+                    "type" : "boolean",
+                    "description" : "When set to true, the possibility to copy any text will be disabled.",
+                    "default" : false,
+                    "example" : true
+                  },
+                  "no_modify" : {
+                    "type" : "boolean",
+                    "description" : "When set to true, the possibility to modify the document will be disabled.",
+                    "default" : false,
+                    "example" : true
+                  }
+                },
+                "example" : "{\n  \"author\": \"Richard Hendricks\",\n  \"user_password\": \"PiedPiper\",\n  \"owner_password\": \"Hooli\",\n  \"no_copy\": true\n}"
+              },
+              "watermark" : {
+                "type" : "object",
+                "description" : "Add a watermark to the generated document. The watermark will always be placed at the center of the document. See the [Watermark](#watermark) section for more details.",
+                "properties" : {
+                  "image" : {
+                    "type" : "string",
+                    "description" : "Image file to add on top of the generated PDF. PDFShift will automatically detect if it's an URL or a data, and act accordingly. When sending as data, the value must be base64 encoded.",
+                    "example" : "http://www.website.com/images/logo.png"
+                  },
+                  "text" : {
+                    "required" : [ "value" ],
+                    "type" : "object",
+                    "description" : "You can add a text as a watermark on your document easily.",
                     "properties" : {
-                      "name" : {
-                        "type" : "string",
-                        "description" : "Name of the cookie.",
-                        "example" : "session"
-                      },
                       "value" : {
                         "type" : "string",
-                        "description" : "Value for the specified cookie.",
-                        "example" : "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+                        "description" : "Text to add on top of the generated PDF.",
+                        "example" : "Generated by PDFShift"
                       },
-                      "secure" : {
+                      "size" : {
+                        "type" : "number",
+                        "description" : "Size of the font, in points.",
+                        "example" : 25
+                      },
+                      "font" : {
+                        "type" : "string",
+                        "description" : "Font Family native to PDF. Allowed fonts are Helvetica, Times and Courier.",
+                        "default" : "Helvetica",
+                        "example" : "Courier"
+                      },
+                      "color" : {
+                        "type" : "string",
+                        "description" : "Color of the font, in hexadecimal.",
+                        "default" : "#000000",
+                        "pattern" : "#[A-Fa-f0-9]{6}",
+                        "example" : "#ccc"
+                      },
+                      "opacity" : {
+                        "type" : "number",
+                        "description" : "Opacity of the font, between 0 (invisible) and 100.",
+                        "example" : 50
+                      },
+                      "bold" : {
                         "type" : "boolean",
-                        "description" : "If set to true, This cookie will only be available for secure (https) connections.",
+                        "description" : "Set the font in Bold.",
                         "default" : false,
                         "example" : true
                       },
-                      "http_only" : {
+                      "italic" : {
                         "type" : "boolean",
-                        "description" : "If set to true, this cookie will only be available to HTTP request only (no javascript).",
+                        "description" : "Set the font in italic.",
                         "default" : false,
                         "example" : true
                       }
                     }
                   },
-                  "example" : "[{\"name\": \"session\", \"value\": \"xxx-xxxx-xxxx\"}]"
-                },
-                "http_headers" : {
-                  "type" : "object",
-                  "description" : "List of HTTP headers that you can pass to the request.",
-                  "example" : "{\"Content-Type\": \"text/html; charset=utf-8\", \"user-agent\": \"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\"}"
-                },
-                "header" : {
-                  "required" : [ "source" ],
-                  "type" : "object",
-                  "description" : "Defines a custom header. See the [Header/Footer](#header-footer) section for more details.",
-                  "properties" : {
-                    "source" : {
-                      "type" : "string",
-                      "description" : "Element to add in the header part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.\n\nAccepted variables are:\n\n| Variable | Description |\n| --- | --- |\n| **{{date}}** | Formatted print date |\n| **{{title}}** | Title of the HTML document |\n| **{{url}}** | Page URL |\n| **{{page}}** | Current page |\n| **{{total}}** | Total number of pages |",
-                      "example" : "<h1>{{ title }}</h1>"
-                    },
-                    "height" : {
-                      "type" : "string",
-                      "description" : "A spacing between the header and the content.",
-                      "example" : "150px"
-                    }
-                  }
-                },
-                "footer" : {
-                  "required" : [ "source" ],
-                  "type" : "object",
-                  "description" : "Same as header (See the [Header/Footer](#header-footer) section for more details).",
-                  "properties" : {
-                    "source" : {
-                      "type" : "string",
-                      "description" : "Element to add in the footer part of the document. You can use variables, indicated at the end of the document. PDFShift will automatically detect if it's an URL and load it, or an HTML data and charge it.\n\nAccepted variables are:\n\n| Variable | Description |\n| --- | --- |\n| **{{date}}** | Formatted print date |\n| **{{title}}** | Title of the HTML document |\n| **{{url}}** | Page URL |\n| **{{page}}** | Current page |\n| **{{total}}** | Total number of pages |",
-                      "example" : "<div>Page {{page}} of {{total}}</div>"
-                    },
-                    "height" : {
-                      "type" : "string",
-                      "description" : "Space between the body and the footer",
-                      "example" : "150px"
-                    }
-                  }
-                },
-                "protection" : {
-                  "required" : [ "owner_password", "user_password" ],
-                  "type" : "object",
-                  "description" : "Will add restrictions on the PDF document. See the [Protection](#protection) section for more details.",
-                  "properties" : {
-                    "author" : {
-                      "type" : "string",
-                      "description" : "Document's author name.",
-                      "example" : "Richard Hendricks"
-                    },
-                    "user_password" : {
-                      "type" : "string",
-                      "description" : "A user who has the password will be able to view the document and perform operations allowed by the permission options.",
-                      "example" : "super-user-password"
-                    },
-                    "owner_password" : {
-                      "type" : "string",
-                      "description" : "A user who has the password will have unlimited access to the PDF, including changing the passwords and permission options.",
-                      "example" : "super-owner-password"
-                    },
-                    "no_print" : {
-                      "type" : "boolean",
-                      "description" : "When set to true, printing will be disabled.",
-                      "default" : false,
-                      "example" : true
-                    },
-                    "no_copy" : {
-                      "type" : "boolean",
-                      "description" : "When set to true, the possibility to copy any text will be disabled.",
-                      "default" : false,
-                      "example" : true
-                    },
-                    "no_modify" : {
-                      "type" : "boolean",
-                      "description" : "When set to true, the possibility to modify the document will be disabled.",
-                      "default" : false,
-                      "example" : true
-                    }
-                  },
-                  "example" : "{\n  \"author\": \"Richard Hendricks\",\n  \"user_password\": \"PiedPiper\",\n  \"owner_password\": \"Hooli\",\n  \"no_copy\": true\n}"
-                },
-                "watermark" : {
-                  "type" : "object",
-                  "description" : "Add a watermark to the generated document. The watermark will always be placed at the center of the document. See the [Watermark](#watermark) section for more details.",
-                  "properties" : {
-                    "image" : {
-                      "type" : "string",
-                      "description" : "Image file to add on top of the generated PDF. PDFShift will automatically detect if it's an URL or a data, and act accordingly. When sending as data, the value must be base64 encoded.",
-                      "example" : "http://www.website.com/images/logo.png"
-                    },
-                    "text" : {
-                      "required" : [ "value" ],
-                      "type" : "object",
-                      "description" : "You can add a text as a watermark on your document easily.",
-                      "properties" : {
-                        "value" : {
-                          "type" : "string",
-                          "description" : "Text to add on top of the generated PDF.",
-                          "example" : "Generated by PDFShift"
-                        },
-                        "size" : {
-                          "type" : "number",
-                          "description" : "Size of the font, in points.",
-                          "example" : 25
-                        },
-                        "font" : {
-                          "type" : "string",
-                          "description" : "Font Family native to PDF. Allowed fonts are Helvetica, Times and Courier.",
-                          "default" : "Helvetica",
-                          "example" : "Courier"
-                        },
-                        "color" : {
-                          "type" : "string",
-                          "description" : "Color of the font, in hexadecimal.",
-                          "default" : "#000000",
-                          "pattern" : "#[A-Fa-f0-9]{6}",
-                          "example" : "#ccc"
-                        },
-                        "opacity" : {
-                          "type" : "number",
-                          "description" : "Opacity of the font, between 0 (invisible) and 100.",
-                          "example" : 50
-                        },
-                        "bold" : {
-                          "type" : "boolean",
-                          "description" : "Set the font in Bold.",
-                          "default" : false,
-                          "example" : true
-                        },
-                        "italic" : {
-                          "type" : "boolean",
-                          "description" : "Set the font in italic.",
-                          "default" : false,
-                          "example" : true
-                        }
-                      }
-                    },
-                    "rotate" : {
-                      "type" : "number",
-                      "description" : "Rotation of the watermark, in degrees",
-                      "default" : 45.0,
-                      "example" : 0
-                    }
+                  "rotate" : {
+                    "type" : "number",
+                    "description" : "Rotation of the watermark, in degrees",
+                    "default" : 45.0,
+                    "example" : 0
                   }
                 }
               }
-            },
-            "x-examples" : {
-              "application/json" : "{\n    \"source\": \"https://wikipedia.org\",\n    \"landscape\": false,\n    \"use_print\": false\n}"
             }
-          } ],
-          "responses" : {
-            "200" : {
-              "description" : "Returns a PDF File",
-              "examples": {
-                "application/pdf": "%PDF-1.4...."
-              },
-              "schema" : {
-                "type" : "file"
-              },
-              "headers" : {
-                "Content-Type" : {
+          },
+          "x-examples" : {
+            "application/json" : "{\n    \"source\": \"https://wikipedia.org\",\n    \"landscape\": false,\n    \"use_print\": false\n}"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns a PDF File",
+            "examples": {
+              "application/pdf": "%PDF-1.4...."
+            },
+            "schema" : {
+              "type" : "file"
+            },
+            "headers" : {
+              "Content-Type" : {
+                "type" : "string",
+                "description" : "The content-type. The binary PDF is returned if the parameter \"filename\" is not provided. Otherwise, a JSON response is returned.",
+                "x-example" : "application/pdf"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Bad request, returned when the request was not properly written.",
+            "schema" : {
+              "required" : [ "code", "identifier", "success" ],
+              "type" : "object",
+              "properties" : {
+                "success" : {
+                  "type" : "boolean",
+                  "description" : "The success of the request. In that case, false."
+                },
+                "code" : {
+                  "type" : "number",
+                  "description" : "The HTTP Status code",
+                  "example" : 400
+                },
+                "identifier" : {
                   "type" : "string",
-                  "description" : "The content-type. The binary PDF is returned if the parameter \"filename\" is not provided. Otherwise, a JSON response is returned.",
-                  "x-example" : "application/pdf"
+                  "description" : "A code that can be useful for debugging purpose with the PDFShift's team.",
+                  "example" : "A127"
+                },
+                "error" : {
+                  "type" : "string",
+                  "description" : "The error message.",
+                  "example" : "Invalid document provided. Must be a PDF or change the key to \"image\" or \"text\"."
                 }
-              }
-            },
-            "400" : {
-              "description" : "Bad request, returned when the request was not properly written.",
-              "schema" : {
-                "required" : [ "code", "identifier", "success" ],
-                "type" : "object",
-                "properties" : {
-                  "success" : {
-                    "type" : "boolean",
-                    "description" : "The success of the request. In that case, false."
-                  },
-                  "code" : {
-                    "type" : "number",
-                    "description" : "The HTTP Status code",
-                    "example" : 400
-                  },
-                  "identifier" : {
-                    "type" : "string",
-                    "description" : "A code that can be useful for debugging purpose with the PDFShift's team.",
-                    "example" : "A127"
-                  },
-                  "error" : {
-                    "type" : "string",
-                    "description" : "The error message.",
-                    "example" : "Invalid document provided. Must be a PDF or change the key to \"image\" or \"text\"."
-                  }
-                }
-              }
-            },
-            "401" : {
-              "description" : "Invalid API Key given.",
-              "schema" : {
-                "required" : [ "code", "identifier", "success" ],
-                "type" : "object",
-                "properties" : {
-                  "success" : {
-                    "type" : "boolean",
-                    "description" : "The success of the request. In that case, false."
-                  },
-                  "code" : {
-                    "type" : "number",
-                    "description" : "The HTTP Status code",
-                    "example" : 400
-                  },
-                  "identifier" : {
-                    "type" : "string",
-                    "description" : "A code that can be useful for debugging purpose with the PDFShift's team.",
-                    "example" : "A127"
-                  },
-                  "error" : {
-                    "type" : "string",
-                    "description" : "The error message.",
-                    "example" : "Invalid API Key provided."
-                  }
-                }
-              }
-            },
-            "403" : {
-              "description" : "No remaining credits left.",
-              "schema" : {
-                "required" : [ "code", "identifier", "success" ],
-                "type" : "object",
-                "properties" : {
-                  "success" : {
-                    "type" : "boolean",
-                    "description" : "The success of the request. In that case, false."
-                  },
-                  "code" : {
-                    "type" : "number",
-                    "description" : "The HTTP Status code",
-                    "example" : 400
-                  },
-                  "identifier" : {
-                    "type" : "string",
-                    "description" : "A code that can be useful for debugging purpose with the PDFShift's team.",
-                    "example" : "A127"
-                  },
-                  "error" : {
-                    "type" : "string",
-                    "description" : "The error message.",
-                    "example" : "No remaining credits left."
-                  }
-                }
-              }
-            },
-            "429" : {
-              "description" : "You have been rate-limited",
-              "schema" : {
-                "type" : "object",
-                "properties" : {
-                  "success" : {
-                    "type" : "boolean",
-                    "description" : "Indicate the state of the success for this request."
-                  },
-                  "error" : {
-                    "type" : "string",
-                    "description" : "The message",
-                    "default" : "You have been rate limited. In order to remove this limitation, please authenticate yourself."
-                  },
-                  "code" : {
-                    "type" : "number",
-                    "description" : "HTTP STatus code",
-                    "example" : 429
-                  },
-                  "reset" : {
-                    "type" : "number",
-                    "description" : "Unix timestamp of when the rate limiting will stop. Based on UTC time.",
-                    "example" : 1539100411
-                  }
-                }
-              },
-              "examples" : {
-                "application/json" : "{\n\"success\": false,\n \"error\": \"You have been rate limited. In order to remove this limitation, please authenticate yourself.\",\n\"code\": 429,\n\"reset\": 1539100411\n}"
               }
             }
-          }
-        }
-      },
-      "/credits/usage" : {
-        "get" : {
-          "summary": "Credits usage",
-          "description" : "Returns the current credits usage.",
-          "tags": [ "credits" ],
-          "parameters" : [ ],
-          "responses" : {
-            "200" : {
-              "description" : "Returns a valid JSON containing the credits details.",
-              "schema" : {
-                "required" : [ "remaining", "total", "used" ],
-                "type" : "object",
-                "properties" : {
-                  "total" : {
-                    "type" : "number",
-                    "description" : "The total number of conversions available in your plan."
-                  },
-                  "remaining" : {
-                    "type" : "number",
-                    "description" : "The number of remaining conversions."
-                  },
-                  "used" : {
-                    "type" : "number",
-                    "description" : "The number of used conversions."
-                  }
+          },
+          "401" : {
+            "description" : "Invalid API Key given.",
+            "schema" : {
+              "required" : [ "code", "identifier", "success" ],
+              "type" : "object",
+              "properties" : {
+                "success" : {
+                  "type" : "boolean",
+                  "description" : "The success of the request. In that case, false."
+                },
+                "code" : {
+                  "type" : "number",
+                  "description" : "The HTTP Status code",
+                  "example" : 400
+                },
+                "identifier" : {
+                  "type" : "string",
+                  "description" : "A code that can be useful for debugging purpose with the PDFShift's team.",
+                  "example" : "A127"
+                },
+                "error" : {
+                  "type" : "string",
+                  "description" : "The error message.",
+                  "example" : "Invalid API Key provided."
                 }
-              },
-              "examples" : {
-                "application/json" : "{\n  \"remaining\": 5793,\n  \"total\": 10000,\n  \"used\": 4207\n}"
               }
+            }
+          },
+          "403" : {
+            "description" : "No remaining credits left.",
+            "schema" : {
+              "required" : [ "code", "identifier", "success" ],
+              "type" : "object",
+              "properties" : {
+                "success" : {
+                  "type" : "boolean",
+                  "description" : "The success of the request. In that case, false."
+                },
+                "code" : {
+                  "type" : "number",
+                  "description" : "The HTTP Status code",
+                  "example" : 400
+                },
+                "identifier" : {
+                  "type" : "string",
+                  "description" : "A code that can be useful for debugging purpose with the PDFShift's team.",
+                  "example" : "A127"
+                },
+                "error" : {
+                  "type" : "string",
+                  "description" : "The error message.",
+                  "example" : "No remaining credits left."
+                }
+              }
+            }
+          },
+          "429" : {
+            "description" : "You have been rate-limited",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "success" : {
+                  "type" : "boolean",
+                  "description" : "Indicate the state of the success for this request."
+                },
+                "error" : {
+                  "type" : "string",
+                  "description" : "The message",
+                  "default" : "You have been rate limited. In order to remove this limitation, please authenticate yourself."
+                },
+                "code" : {
+                  "type" : "number",
+                  "description" : "HTTP STatus code",
+                  "example" : 429
+                },
+                "reset" : {
+                  "type" : "number",
+                  "description" : "Unix timestamp of when the rate limiting will stop. Based on UTC time.",
+                  "example" : 1539100411
+                }
+              }
+            },
+            "examples" : {
+              "application/json" : "{\n\"success\": false,\n \"error\": \"You have been rate limited. In order to remove this limitation, please authenticate yourself.\",\n\"code\": 429,\n\"reset\": 1539100411\n}"
             }
           }
         }
       }
     },
-    "securityDefinitions" : {
-      "Basic authentication" : {
-        "description" : "The Authorization scheme requires the API key as the user and an empty string as the password.",
-        "type" : "basic"
-      }
-    },
-    "definitions" : {
-      "Errors" : {
-        "type" : "object",
-        "required" : [ "code", "success" ],
-        "properties" : {
-          "code" : {
-            "type" : "integer",
-            "minimum" : 400,
-            "maximum" : 599
-          },
-          "error" : {
-            "type" : "string",
-            "example" : "Document size too big. Limit of 1Mb, document is 1.74Mb"
-          },
-          "identifier" : {
-            "type" : "string",
-            "description" : "An identifier used to help PDFShift better target the origin of the issue.\nNot really needed on your side.",
-            "example" : "A96"
-          },
-          "success" : {
-            "type" : "boolean",
-            "description" : "Indicate if the request was successful or not.\nValue is always True for 2xx requests, and false otherwise."
+    "/credits/usage" : {
+      "get" : {
+        "summary": "Credits usage",
+        "description" : "Returns the current credits usage.",
+        "tags": [ "credits" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Returns a valid JSON containing the credits details.",
+            "schema" : {
+              "required" : [ "remaining", "total", "used" ],
+              "type" : "object",
+              "properties" : {
+                "total" : {
+                  "type" : "number",
+                  "description" : "The total number of conversions available in your plan."
+                },
+                "remaining" : {
+                  "type" : "number",
+                  "description" : "The number of remaining conversions."
+                },
+                "used" : {
+                  "type" : "number",
+                  "description" : "The number of used conversions."
+                }
+              }
+            },
+            "examples" : {
+              "application/json" : "{\n  \"remaining\": 5793,\n  \"total\": 10000,\n  \"used\": 4207\n}"
+            }
           }
-        },
-        "description" : "This general error structure is used throughout this API.",
-        "example" : "{\n    \"code\": 400,\n    \"error\": \"Document size too big. Limit of 1Mb, document is 1.74Mb\",\n    \"identifier\": \"A96\",\n    \"success\": false\n}"
+        }
       }
     }
+  },
+  "securityDefinitions" : {
+    "Basic authentication" : {
+      "description" : "The Authorization scheme requires the API key as the user and an empty string as the password.",
+      "type" : "basic"
+    }
+  },
+  "definitions" : {
+    "Errors" : {
+      "type" : "object",
+      "required" : [ "code", "success" ],
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "minimum" : 400,
+          "maximum" : 599
+        },
+        "error" : {
+          "type" : "string",
+          "example" : "Document size too big. Limit of 1Mb, document is 1.74Mb"
+        },
+        "identifier" : {
+          "type" : "string",
+          "description" : "An identifier used to help PDFShift better target the origin of the issue.\nNot really needed on your side.",
+          "example" : "A96"
+        },
+        "success" : {
+          "type" : "boolean",
+          "description" : "Indicate if the request was successful or not.\nValue is always True for 2xx requests, and false otherwise."
+        }
+      },
+      "description" : "This general error structure is used throughout this API.",
+      "example" : "{\n    \"code\": 400,\n    \"error\": \"Document size too big. Limit of 1Mb, document is 1.74Mb\",\n    \"identifier\": \"A96\",\n    \"success\": false\n}"
+    }
   }
+}

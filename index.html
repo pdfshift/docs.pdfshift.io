@@ -521,6 +521,18 @@ You can also send an array of documents to convert if parallel conversions is en
                 </a>
             </p><p class="description"><p>Name of the destination file. If given, the response <strong>will not</strong> be the PDF, but a JSON response containing an <code>url</code> parameter to an Amazon S3 bucket, to download the file. The file will be kept for 2 days, then automatically deleted. See <a href="#saving-the-document-to-amazon-s3">Saving the document to Amazon S3</a> for an example.</p></p>
         </div>
+        <div class="property" id="convert-body-webhook">
+            <p class="property-definition">
+                <label>webhook</label><code>String</code>
+                <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
+                <a href="#convert-body-webhook" title="Anchor to this property" class="anchor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </a>
+            </p><p class="description"><p>An URL where we will send a POST request containing a JSON body similar to when you use the filename parameter. The JSON response will contain a URL key that points to your file, stored on Amazon S3.</p></p>
+        </div>
         <div class="property" id="convert-body-s3_destination">
             <p class="property-definition">
                 <label>s3_destination</label><code>String</code>
