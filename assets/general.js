@@ -116,6 +116,8 @@
                 scrollToPosition(window, getOffsetTop(targetElement), 'smooth').then(function () {
                     isScrolling = false
                 })
+
+                document.location.hash = hashtag
             }
 
             const parentTarget = document.querySelector('.main>aside')
