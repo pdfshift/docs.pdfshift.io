@@ -62,7 +62,7 @@
               },
               "filename": {
                 "type": "string",
-                "description": "Name of the destination file. If given, the response **will not** be the PDF, but a JSON response containing an `url` parameter to an Amazon S3 bucket, to download the file. The file will be kept for 2 days, then automatically deleted. See [Saving the document to Amazon S3](#saving-the-document-to-amazon-s3) for an example.",
+                "description": "Name of the destination file. Only an alphanumerical value with \"-\" or \"_\", of at least 7 chars accepted. If given, the response **will not** be the PDF, but a JSON response containing an `url` parameter to an Amazon S3 bucket, to download the file. The file will be kept for 2 days, then automatically deleted. See [Saving the document to Amazon S3](#saving-the-document-to-amazon-s3) for an example.",
                 "default": null,
                 "example": "invoice.pdf"
               },
