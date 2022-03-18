@@ -295,7 +295,7 @@ We suggest to set to "api" to have some values, but anything will work as long a
         </h3>
         <div class="description-pre">
             <p>Rate limiting is only forced for <strong>unauthenticated accounts</strong> with a limit of 2 requests per minutes.</p>
-<p>As soon as you are authenticated, the restriction is lifted and you can convert as many documents as you want.</p>
+<p>Once authenticated, you can convert up to 250 documents per minute (10 only if you use the sandbox mode).</p>
 <p>When reaching the rate limit, you will get an HTTP status code of <code>429</code>.</p>
 <p>Each request will contain three headers to let you know your usage:</p>
 
@@ -495,7 +495,7 @@ You can also send an array of documents to convert if parallel conversions is en
                         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                     </svg>
                 </a>
-            </p><p class="description"><p>Will generates documents that doesn&#39;t count in the credits. The generated document will come with a watermark.</p></p>
+            </p><p class="description"><p>Will generates documents that doesn&#39;t count in the credits. The generated document will come with a watermark and you are limited to 10 documents per minutes.</p></p>
         </div>
         <div class="property" id="convert-body-encode">
             <p class="property-definition">
