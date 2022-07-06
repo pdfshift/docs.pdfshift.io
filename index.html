@@ -1155,7 +1155,7 @@ You can also send an array of documents to convert if parallel conversions is en
         </div>
         <div class="property" id="convert-body-watermark-text">
             <p class="property-definition">
-                <label>text</label><code>Object</code>
+                <label>text</label><code>string</code>
                 <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
                 <a href="#convert-body-watermark-text" title="Anchor to this property" class="anchor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1164,22 +1164,10 @@ You can also send an array of documents to convert if parallel conversions is en
                     </svg>
                 </a>
             </p><p class="description"><p>You can add a text as a watermark on your document easily.</p></p>
-                <div class="properties">
-        <div class="property" id="convert-body-watermark-text-value">
-            <p class="property-definition">
-                <label>value<span class="required">required</span></label><code>String</code>
-                <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
-                <a href="#convert-body-watermark-text-value" title="Anchor to this property" class="anchor">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                    </svg>
-                </a>
-            </p><p class="description"><p>Text to add on top of the generated PDF.</p></p>
         </div>
         <div class="property" id="convert-body-watermark-text-size">
             <p class="property-definition">
-                <label>size</label><code>Number</code>
+                <label>font_size</label><code>Number</code>
                 <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
                 <a href="#convert-body-watermark-text-size" title="Anchor to this property" class="anchor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1191,7 +1179,7 @@ You can also send an array of documents to convert if parallel conversions is en
         </div>
         <div class="property" id="convert-body-watermark-text-font">
             <p class="property-definition">
-                <label>font</label><code>String</code>
+                <label>font_family</label><code>String</code>
                 <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
                 <a href="#convert-body-watermark-text-font" title="Anchor to this property" class="anchor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1203,7 +1191,7 @@ You can also send an array of documents to convert if parallel conversions is en
         </div>
         <div class="property" id="convert-body-watermark-text-color">
             <p class="property-definition">
-                <label>color</label><code>String</code>
+                <label>font_color</label><code>String</code>
                 <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
                 <a href="#convert-body-watermark-text-color" title="Anchor to this property" class="anchor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1215,7 +1203,7 @@ You can also send an array of documents to convert if parallel conversions is en
         </div>
         <div class="property" id="convert-body-watermark-text-opacity">
             <p class="property-definition">
-                <label>opacity</label><code>Number</code>
+                <label>font_opacity</label><code>Number</code>
                 <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
                 <a href="#convert-body-watermark-text-opacity" title="Anchor to this property" class="anchor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1227,7 +1215,7 @@ You can also send an array of documents to convert if parallel conversions is en
         </div>
         <div class="property" id="convert-body-watermark-text-bold">
             <p class="property-definition">
-                <label>bold</label><code>Boolean</code>
+                <label>font_bold</label><code>Boolean</code>
                 <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
                 <a href="#convert-body-watermark-text-bold" title="Anchor to this property" class="anchor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1239,7 +1227,7 @@ You can also send an array of documents to convert if parallel conversions is en
         </div>
         <div class="property" id="convert-body-watermark-text-italic">
             <p class="property-definition">
-                <label>italic</label><code>Boolean</code>
+                <label>font_italic</label><code>Boolean</code>
                 <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
                 <a href="#convert-body-watermark-text-italic" title="Anchor to this property" class="anchor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1248,9 +1236,6 @@ You can also send an array of documents to convert if parallel conversions is en
                     </svg>
                 </a>
             </p><p class="description"><p>Set the font in italic.</p></p>
-        </div>
-    </div>
-            
         </div>
         <div class="property" id="convert-body-watermark-rotate">
             <p class="property-definition">
