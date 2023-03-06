@@ -1311,6 +1311,53 @@ You can also send an array of documents to convert if parallel conversions is en
                     </table>
                 </div>
         </div>
+        <div>
+            <div class="responses">
+                <p>Some interesting headers will also be returned in the successful response</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Header</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th><strong>x-response-status-code</strong></th>
+                            <td><p>The status code from the conversion servers</p></td>
+                        </tr>
+                        <tr>
+                            <th><strong>x-response-content-length</strong></th>
+                            <td><p>Length of the response</p></td>
+                        </tr>
+                        <tr>
+                            <th><strong>x-pdfshift-processor</strong></th>
+                            <td><p>Which backend processor was used</p></td>
+                        </tr>
+                        <tr>
+                            <th><strong>x-process-time</strong></th>
+                            <td><p>Complete duration of the request (including parsing, generating the response)</p></td>
+                        </tr>
+                        <tr>
+                            <th><strong>x-response-duration</strong></th>
+                            <td><p>Duration taken for the conversion (only)</p></td>
+                        </tr>
+                        <tr>
+                            <th><strong>x-credits-used</strong></th>
+                            <td><p>How many credits this conversion used</p></td>
+                        </tr>
+                        <tr>
+                            <th><strong>x-credits-remaining</strong></th>
+                            <td><p>How many credits remains on your account</p></td>
+                        </tr>
+                        <tr>
+                            <th><strong>x-request-id</strong></th>
+                            <td><p>The request ID. Could be useful for debugging</p></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
                         <h2 id="details">Details</h2>
