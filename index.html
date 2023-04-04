@@ -677,6 +677,18 @@ You can also send an array of documents to convert if parallel conversions is en
                 </a>
             </p><p class="description"><p>In milliseconds. Will wait for this duration before capturing the document. Up to 10 seconds max.</p></p>
         </div>
+        <div class="property" id="convert-body-raise_for_status">
+            <p class="property-definition">
+                <label>raise_for_status</label><code>Boolean</code>
+                <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
+                <a href="#convert-body-raise_for_status" title="Anchor to this property" class="anchor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </a>
+            </p><p class="description"><p>Will stop the conversion if the status_code from the given source is not 2XX. Default is <strong>False</strong></p></p>
+        </div>
         <div class="property" id="convert-body-use_print">
             <p class="property-definition">
                 <label>use_print</label><code>Boolean</code>
