@@ -605,18 +605,6 @@ You can also send an array of documents to convert if parallel conversions is en
                 </a>
             </p><p class="description"><p>Will execute the given Javascript before saving the document. Can be an URL or a String of JS code.</p></p>
         </div>
-        <div class="property" id="convert-body-disable_images">
-            <p class="property-definition">
-                <label>disable_images</label><code>Boolean</code>
-                <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
-                <a href="#convert-body-disable_images" title="Anchor to this property" class="anchor">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                    </svg>
-                </a>
-            </p><p class="description"><p>Images will not be included in the final document.</p></p>
-        </div>
         <div class="property" id="convert-body-disable_javascript">
             <p class="property-definition">
                 <label>disable_javascript</label><code>Boolean</code>
@@ -628,18 +616,6 @@ You can also send an array of documents to convert if parallel conversions is en
                     </svg>
                 </a>
             </p><p class="description"><p>Will not execute the javascript at all in the document.</p></p>
-        </div>
-        <div class="property" id="convert-body-disable_links">
-            <p class="property-definition">
-                <label>disable_links</label><code>Boolean</code>
-                <!-- pattern, minimum, maximum, minLength, maxLength, minItems, maxItems, enum, ... -->
-                <a href="#convert-body-disable_links" title="Anchor to this property" class="anchor">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                    </svg>
-                </a>
-            </p><p class="description"><p>The link in the document will not point anywhere.</p></p>
         </div>
         <div class="property" id="convert-body-disable_backgrounds">
             <p class="property-definition">
@@ -1652,32 +1628,12 @@ This means that when the user password has been entered, some PDF reader ignore 
             </a>
         </h3>
         <div class="description-pre">
-            <p>You can add a watermark to your documents via three alternatives:</p>
+            <p>You can add a watermark to your documents via these alternatives:</p>
 <ul>
-<li>Via a PDF</li>
 <li>Via Text</li>
 <li>Via Image</li>
 </ul>
 <p>Each alternatives has a set of options, which is detailed here:</p>
-<h4>Via PDF</h4>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>source</td>
-<td>URL or Base64 encoded PDF content</td>
-<td><strong>required</strong></td>
-<td>You can provide the source either as an URL, or a <strong>base 64 encoded</strong> PDF content. Raw PDF content will be refused. We recommend you to send a one page PDF content because only the first page is used on each of your generated content.</td>
-</tr>
-</tbody>
-</table>
 <h4>Via Text</h4>
 <table>
 <thead>
