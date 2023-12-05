@@ -567,7 +567,7 @@ You can also send an array of documents to convert if parallel conversions is en
                         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                     </svg>
                 </a>
-            </p><p class="description"><p>Name of a function available globally. When present, PDFShift will wait for this function to return a truthy value (true, 1, a string, etc) or up to 30 seconds, then proceed to the conversion.</p></p>
+            </p><p class="description"><p>Name of a function available globally. When present, PDFShift will wait for this function to return a truthy value (true, 1, a string, etc) or up to 30 seconds, then proceed to the conversion. If the function never returns a truthy value in the allocated time, the conversion will fail with an error.</p></p>
         </div>
         <div class="property" id="convert-body-landscape">
             <p class="property-definition">
