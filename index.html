@@ -1965,7 +1965,7 @@ response = requests.post(
 response.raise_for_status()
 
 with open('result.pdf', 'wb') as output:
-    for chunck in response.iter_content(chunck_size=1024):
+    for chunck in response.iter_content(chunk_size=1024):
         output.write(chunck)
 </code></pre>
                     </div>
@@ -2429,7 +2429,7 @@ response = requests.post(
 response.raise_for_status()
 
 with open('basic-auth.pdf', 'wb') as output:
-    for chunck in response.iter_content(chunck_size=1024):
+    for chunck in response.iter_content(chunk_size=1024):
         output.write(chunck)
 </code></pre>
                     </div>
@@ -2664,7 +2664,7 @@ response = requests.post(
 response.raise_for_status()
 
 with open('cookies.pdf', 'wb') as output:
-    for chunck in response.iter_content(chunck_size=1024):
+    for chunck in response.iter_content(chunk_size=1024):
         output.write(chunck)
 </code></pre>
                     </div>
@@ -2911,7 +2911,7 @@ response = requests.post(
 response.raise_for_status()
 
 with open('footer.pdf', 'wb') as output:
-    for chunck in response.iter_content(chunck_size=1024):
+    for chunck in response.iter_content(chunk_size=1024):
         output.write(chunck)
 </code></pre>
                     </div>
