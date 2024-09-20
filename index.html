@@ -713,6 +713,29 @@ You can also send an array of documents to convert if parallel conversions is en
                 </a>
             </p><p class="description"><p>A value between 0 and 2. Allows you to increase the zoom in the document for specific purposes. 1 is the default zoom, lower is smaller, higher is bigger.</p></p>
         </div>
+        <div class="property" id="convert-body-is_gdpr">
+            <p class="property-definition">
+                <label>is_gdpr</label><code>Boolean</code>
+                <a href="#convert-body-is_gdpr" title="Anchor to this property" class="anchor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </a>
+            </p>
+            <p class="description">Defaults to <code>false</code>. (Identical to <code>is_hipaa</code>). If set to <code>true</code>, it will ensure that the request will be refused if a property such as <code>filename</code> or <code>webhook</code> is provided, to avoid saving the document on PDFShift servers. Read more at <a href="https://help.pdfshift.io/how-do-you-handle-sensitive-documents" title="How to handle sensitive documents">Handling sensitive documents</a></p>
+        </div>
+        <div class="property" id="convert-body-is_hipaa">
+            <p class="property-definition">
+                <label>is_hipaa</label><code>Boolean</code>
+                <a href="#convert-body-is_hipaa" title="Anchor to this property" class="anchor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </a>
+                <p class="description">Defaults to <code>false</code>. (Identical to <code>is_gdpr</code>). If set to <code>true</code>, it will ensure that the request will be refused if a property such as <code>filename</code> or <code>webhook</code> is provided, to avoid saving the document on PDFShift servers. Read more at <a href="https://help.pdfshift.io/how-do-you-handle-sensitive-documents" title="How to handle sensitive documents">Handling sensitive documents</a></p>
+        </div>
         <div class="property" id="convert-body-margin">
             <p class="property-definition">
                 <label>margin</label><code>Object</code>
@@ -774,7 +797,6 @@ You can also send an array of documents to convert if parallel conversions is en
             </p><p class="description"><p>Space between the left and the content.</p></p>
         </div>
     </div>
-            
         </div>
         <div class="property" id="convert-body-auth">
             <p class="property-definition">
