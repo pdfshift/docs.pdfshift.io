@@ -2037,7 +2037,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authentication", "Basic " + "api:your_api_key")
+            .header("Authorization", "Basic " + "api:your_api_key")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -2274,7 +2274,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authentication", "Basic " + "your_api_key")
+            .header("Authorization", "Basic " + "your_api_key")
             .POST(HttpRequest.BodyPublishers.ofFile(Paths.get("src/main/resources/body.json")))
             .build();
 
@@ -2512,7 +2512,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authentication", "Basic " + "api:your_api_key")
+            .header("Authorization", "Basic " + "api:your_api_key")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -2748,7 +2748,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authentication", "Basic " + "api:your_api_key")
+            .header("Authorization", "Basic " + "api:your_api_key")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -2994,7 +2994,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authentication", "Basic " + "api:your_api_key")
+            .header("Authorization", "Basic " + "api:your_api_key")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -3345,7 +3345,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(10))
             .header("Content-Type", "application/json")
-            .header("Authentication", "Basic " + "api:your_api_key")
+            .header("Authorization", "Basic " + "api:your_api_key")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
