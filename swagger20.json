@@ -555,9 +555,11 @@
     }
   },
   "securityDefinitions" : {
-    "Basic authentication" : {
-      "description" : "The Authorization scheme requires the API key as the user and an empty string as the password.",
-      "type" : "basic"
+    "ApiKeyAuth" : {
+      "type": "apiKey",
+      "name": "X-API-Key",
+      "in": "header",
+      "description": "API key must be provided in the X-API-Key header"
     }
   },
   "definitions" : {

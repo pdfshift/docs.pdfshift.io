@@ -233,23 +233,18 @@
             </a>
         </h3>
         <div class="description-pre">
-            <p>Authenticate your account by including your secret key in API requests.<br/>
-You can manage your API keys in the <a href="https://app.pdfshift.io/dashboard/">Dashboard</a>.</p>
-<p>Authentication to the API is performed via <a href="http://en.wikipedia.org/wiki/Basic_access_authentication">HTTP Basic Auth</a>.</p>
-<p>In order to connect, provide the basic auth values with "api" as the username, and your API Key as the password.</p>
-
-<div class="alert alert-warning">
-<p>Note that the username value is ignored on PDFShift.<br/>
-We suggest to set to "api" to have some values, but anything will work as long as it's compatible with the standard.</p>
-</div>
+            <p>
+                Authenticate your account by including your secret key in API requests.<br/>
+                You can manage your API keys in the <a href="https://app.pdfshift.io/dashboard/">Dashboard</a>.
+            </p>
+            <p>Authentication to the API is performed by using the HTTP Header <code>X-API-Key</code>.</p>
         </div>
     </div>
 
     <div class="method-examples">
         <div class="examples">
             <div class="example">
-                <pre><code class="language-http">Authorization: Basic api:your_api_key
-</code></pre>
+                <pre><code class="language-http">X-API-Key: sk_xxxxxxxxxxxx</code></pre>
             </div>
     </div>
 </section>
@@ -1991,7 +1986,7 @@ file_put_contents('result.pdf', $response);
 
 response = requests.post(
     'https://api.pdfshift.io/v3/convert/pdf',
-    auth=('api', 'your_api_key'),
+    headers={'X-API-Key': 'sk_xxxxxxxxxxxx'},
     json={'source': 'https://www.example.com'},
     stream=True
 )
@@ -2015,7 +2010,7 @@ Net::HTTP.start(uri.host, uri.port, :use_ssl =&gt; true) do |http|
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = data.to_json
     request["Content-Type"] = "application/json"
-    request.basic_auth 'api', 'your_api_key'
+    request["X-API-Key"] = "sk_xxxxxxxxxxxx"
 
     response = http.request(request)
 
@@ -2037,7 +2032,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Basic " + "api:your_api_key")
+            .header("X-API-Key", "sk_xxxxxxxxxxxx")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -2062,9 +2057,9 @@ end
                         <pre><code class="language-csharp">static void Main(string[] args)
 {
     IRestClient client = new RestClient("https://api.pdfshift.io/v3/convert/pdf");
-    client.Authenticator = new HttpBasicAuthenticator("api", "your_api_key");
 
     IRestRequest request = new RestRequest(Method.POST);
+    request.AddHeader("X-API-Key", "sk_xxxxxxxxxxxx");
 
     var json = new
     {
@@ -2096,8 +2091,6 @@ import (
 )
 
 func main() {
-    API_KEY := "api:your_api_key"
-
     message := map[string]interface{}{
         "source":  "https://example.com",
     }
@@ -2112,7 +2105,7 @@ func main() {
     if err != nil {
         log.Fatalln(err)
     }
-    request.SetBasicAuth("api", API_KEY)
+    request.Header.Set("X-API-Key", "sk_xxxxxxxxxxxx")
 
     resp, err := client.Do(request)
     if err != nil {
@@ -2142,8 +2135,6 @@ func main() {
         </div>
     </div>
 </section>
-
-                        
 
 <section class="method">
     <div class="method-details">
@@ -2219,7 +2210,7 @@ $json = json_decode($response, true);
 
 response = requests.post(
     'https://api.pdfshift.io/v3/convert/pdf',
-    auth=('api', 'your_api_key'),
+    headers={'X-API-Key': 'sk_xxxxxxxxxxxx'},
     json={
         'source': 'https://www.example.com',
         'filename': 'result.pdf'
@@ -2245,7 +2236,7 @@ Net::HTTP.start(uri.host, uri.port, :use_ssl =&gt; true) do |http|
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = data.to_json
     request["Content-Type"] = "application/json"
-    request.basic_auth 'api', 'your_api_key'
+    request["X-API-Key"] = "sk_xxxxxxxxxxxx"
 
     response = http.request(request)
 
@@ -2274,7 +2265,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Basic " + "your_api_key")
+            .header("X-API-Key", "sk_xxxxxxxxxxxx")
             .POST(HttpRequest.BodyPublishers.ofFile(Paths.get("src/main/resources/body.json")))
             .build();
 
@@ -2299,9 +2290,9 @@ end
                         <pre><code class="language-csharp">static void Main(string[] args)
 {
     IRestClient client = new RestClient("https://api.pdfshift.io/v3/convert/pdf");
-    client.Authenticator = new HttpBasicAuthenticator("api", "your_api_key");
 
     IRestRequest request = new RestRequest(Method.POST);
+    request.AddHeader("X-API-Key", "sk_xxxxxxxxxxxx");
 
     var json = new
     {
@@ -2335,8 +2326,6 @@ import (
 )
 
 func main() {
-    API_KEY := "api:your_api_key"
-
     message := map[string]interface{}{
         "source": "https://example.com",
         "filename": "anotherExample.pdf",
@@ -2352,7 +2341,7 @@ func main() {
     if err != nil {
         log.Fatalln(err)
     }
-    request.SetBasicAuth("api", API_KEY)
+    request.Header.Set("X-API-Key", "sk_xxxxxxxxxxxx")
 
     resp, err := client.Do(request)
     if err != nil {
@@ -2449,7 +2438,7 @@ file_put_contents('basic-auth.pdf', $response);
 
 response = requests.post(
     'https://api.pdfshift.io/v3/convert/pdf',
-    auth=('api', 'your_api_key'),
+    headers={'X-API-Key': 'sk_xxxxxxxxxxxx'},
     json={
         'source': 'https://httpbin.org/basic-auth/user/passwd',
         'auth': {
@@ -2483,7 +2472,7 @@ Net::HTTP.start(uri.host, uri.port, :use_ssl =&gt; true) do |http|
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = data.to_json
     request["Content-Type"] = "application/json"
-    request.basic_auth 'api', 'your_api_key'
+    request["X-API-Key"] = "sk_xxxxxxxxxxxx"
 
     response = http.request(request)
 
@@ -2512,7 +2501,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Basic " + "api:your_api_key")
+            .header("X-API-Key", "sk_xxxxxxxxxxxx")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -2537,9 +2526,9 @@ end
                         <pre><code class="language-csharp">static void Main(string[] args)
 {
     IRestClient client = new RestClient("https://api.pdfshift.io/v3/convert/pdf");
-    client.Authenticator = new HttpBasicAuthenticator("api", "your_api_key");
 
     IRestRequest request = new RestRequest(Method.POST);
+    request.AddHeader("X-API-Key", "sk_xxxxxxxxxxxx");
 
     var json = new
     {
@@ -2572,8 +2561,6 @@ import (
 )
 
 func main() {
-    API_KEY := "api:your_api_key"
-
     message := map[string]interface{}{
         "source": "https://httpbin.org/basic-auth/user/passwd",
         "auth": map[string]string{
@@ -2592,7 +2579,7 @@ func main() {
     if err != nil {
         log.Fatalln(err)
     }
-    request.SetBasicAuth("api", API_KEY)
+    request.Header.Set("X-API-Key", "sk_xxxxxxxxxxxx")
 
     resp, err := client.Do(request)
     if err != nil {
@@ -2687,7 +2674,7 @@ file_put_contents('cookies.pdf', $response);
 
 response = requests.post(
     'https://api.pdfshift.io/v3/convert/pdf',
-    auth=('api', 'your_api_key'),
+    headers={'X-API-Key': 'sk_xxxxxxxxxxxx'},
     json={
         'source': 'https://httpbin.org/cookies',
         'cookies': [{'name': 'session', 'value': '4cb496a8-a3eb-4a7e-a704-f993cb6a4dac'}]
@@ -2716,7 +2703,7 @@ Net::HTTP.start(uri.host, uri.port, :use_ssl =&gt; true) do |http|
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = data.to_json
     request["Content-Type"] = "application/json"
-    request.basic_auth 'api', 'your_api_key'
+    request["X-API-Key"] = "sk_xxxxxxxxxxxx"
 
     response = http.request(request)
 
@@ -2748,7 +2735,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Basic " + "api:your_api_key")
+            .header("X-API-Key", "sk_xxxxxxxxxxxx")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -2773,9 +2760,9 @@ end
                         <pre><code class="language-csharp">static void Main(string[] args)
 {
     IRestClient client = new RestClient("https://api.pdfshift.io/v3/convert/pdf");
-    client.Authenticator = new HttpBasicAuthenticator("api", "your_api_key");
 
     IRestRequest request = new RestRequest(Method.POST);
+    request.AddHeader("X-API-Key", "sk_xxxxxxxxxxxx");
 
     var json = new
     {
@@ -2809,8 +2796,6 @@ import (
 )
 
 func main() {
-    API_KEY := "api:your_api_key"
-
     cookies := make([]map[string]string, 1)
 
     cookies[0] = make(map[string]string)
@@ -2832,7 +2817,7 @@ func main() {
     if err != nil {
         log.Fatalln(err)
     }
-    request.SetBasicAuth("api", API_KEY)
+    request.Header.Set("X-API-Key", "sk_xxxxxxxxxxxx")
 
     resp, err := client.Do(request)
     if err != nil {
@@ -2931,7 +2916,7 @@ file_put_contents('footer.pdf', $response);
 
 response = requests.post(
     'https://api.pdfshift.io/v3/convert/pdf',
-    auth=('api', 'your_api_key'),
+    headers={'X-API-Key': 'sk_xxxxxxxxxxxx'},
     json={
         'source': 'https://www.example.com',
         'footer': {
@@ -2965,7 +2950,7 @@ Net::HTTP.start(uri.host, uri.port, :use_ssl =&gt; true) do |http|
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = data.to_json
     request["Content-Type"] = "application/json"
-    request.basic_auth 'api', 'your_api_key'
+    request["X-API-Key"] = "sk_xxxxxxxxxxxx"
 
     response = http.request(request)
 
@@ -2994,7 +2979,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(20))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Basic " + "api:your_api_key")
+            .header("X-API-Key", "sk_xxxxxxxxxxxx")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -3019,9 +3004,9 @@ end
                         <pre><code class="language-csharp">static void Main(string[] args)
 {
     IRestClient client = new RestClient("https://api.pdfshift.io/v3/convert/pdf");
-    client.Authenticator = new HttpBasicAuthenticator("api", "your_api_key");
 
     IRestRequest request = new RestRequest(Method.POST);
+    request.AddHeader("X-API-Key", "sk_xxxxxxxxxxxx");
 
     var json = new
     {
@@ -3054,8 +3039,6 @@ import (
 )
 
 func main() {
-    API_KEY := "api:your_api_key"
-
     message := map[string]interface{}{
         "source": "https://www.example.com",
         "footer": map[string]string{
@@ -3074,7 +3057,7 @@ func main() {
     if err != nil {
         log.Fatalln(err)
     }
-    request.SetBasicAuth("api", API_KEY)
+    request.Header.Set("X-API-Key", "sk_xxxxxxxxxxxx")
 
     resp, err := client.Do(request)
     if err != nil {
@@ -3247,7 +3230,7 @@ document.close()
 
 response = requests.post(
     'https://api.pdfshift.io/v3/convert/pdf',
-    auth=('api', 'your_api_key'),
+    headers={'X-API-Key': 'sk_xxxxxxxxxxxx'},
     json={'source': document_content}
 )
 
@@ -3296,7 +3279,7 @@ def generate_invoice
         request = Net::HTTP::Post.new(uri.request_uri)
         request.body = data.to_json
         request["Content-Type"] = "application/json"
-        request.basic_auth 'api', 'your_api_key'
+        request["X-API-Key"] = "sk_xxxxxxxxxxxx"
 
         response = http.request(request)
 
@@ -3345,7 +3328,7 @@ end
             .uri(URI.create("https://api.pdfshift.io/v3/convert/pdf"))
             .timeout(Duration.ofSeconds(10))
             .header("Content-Type", "application/json")
-            .header("Authorization", "Basic " + "api:your_api_key")
+            .header("X-API-Key", "sk_xxxxxxxxxxxx")
             .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
             .build();
 
@@ -3407,9 +3390,9 @@ end
                         <pre><code class="language-csharp">static void Main(string[] args)
 {
     IRestClient client = new RestClient("https://api.pdfshift.io/v3/convert/pdf");
-    client.Authenticator = new HttpBasicAuthenticator("api", "your_api_key");
 
     IRestRequest request = new RestRequest(Method.POST);
+    request.AddHeader("X-API-Key", "sk_xxxxxxxxxxxx");
     string document_content = File.ReadAllText("invoice.html");
     var json = new
     {
@@ -3469,8 +3452,6 @@ import (
 )
 
 func main() {
-    API_KEY := "api:your_api_key"
-
     encoded, err := ioutil.ReadFile("example.html")
     if err != nil {
         log.Fatalln(err)
@@ -3493,7 +3474,7 @@ func main() {
     if err != nil {
         log.Fatalln(err)
     }
-    request.SetBasicAuth("api", API_KEY)
+    request.Header.Set("X-API-Key", "sk_xxxxxxxxxxxx")
 
     resp, err := client.Do(request)
     if err != nil {
